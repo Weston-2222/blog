@@ -2,7 +2,6 @@ import CopyButton from '@/components/copyButton';
 import {
   IconBrandGithubFilled,
   IconCoinBitcoinFilled,
-  IconMail,
 } from '@tabler/icons-react';
 
 const page = () => {
@@ -21,7 +20,6 @@ const page = () => {
 
             <div className='space-y-1 text-sm md:text-base flex flex-col items-end'>
               <div className='flex items-center gap-2'>
-                <IconMail className='h-4.5 w-4.5' />
                 <p>weston.workmail@gmail.com</p>
                 <CopyButton
                   command='weston.workmail@gmail.com'
@@ -38,7 +36,7 @@ const page = () => {
                   <button className='rounded-md p-1'>westons.blog</button>
                 </a>
               </p>
-              <p className=''>中華科技大學航航空電子系</p>
+              <p className=''>中華科技大學航空電子系</p>
             </div>
           </div>
         </header>
