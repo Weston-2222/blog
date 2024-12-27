@@ -8,7 +8,7 @@ const page = () => {
   return (
     <div className='flex flex-col items-center'>
       <div className='max-w-2xl'>
-        <header className='max-w-4xl mx-auto px-4 pt-12 md:pt-16'>
+        <header className='max-w-4xl mx-auto px-4 pt-8'>
           <div className='flex flex-col md:flex-row md:items-center md:justify-between'>
             <div className='mb-6 md:mb-0'>
               <h1 className='text-4xl font-bold tracking-wide mb-1'>Weston</h1>
