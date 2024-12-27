@@ -10,7 +10,7 @@ const FloatUp = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
       <motion.div
-        className='px-4 py-2  rounded-lg cursor-pointer text-center'
+        className='px-4 py-2 rounded-lg cursor-pointer text-center'
         whileHover={hoverAnimation}
         transition={{ type: 'spring', stiffness: 300 }}
       >

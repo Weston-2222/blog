@@ -10,7 +10,7 @@ const headerLink = [
     href: '/resume',
     node: (
       <Link key='resume' href='/resume'>
-        Resume
+        Resume{' '}
       </Link>
     ),
   },
@@ -33,7 +33,7 @@ const headerLink = [
 
 const Header = () => {
   return (
-    <header className='flex justify-center w-full'>
+    <header className='flex justify-center w-full bg-foreground'>
       <div className='w-[768px]'>
         <div className='mx-auto px-4 py-3 flex justify-between items-center'>
           {/* Logo */}

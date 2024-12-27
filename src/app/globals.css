@@ -6,29 +6,31 @@
   margin: 0;
   box-sizing: border-box;
 }
-
-body {
-  background-color: var(--background);
-  font-family: 'Inter', system-ui, sans-serif;
-  margin: 0; /* 若需要把整體頁面鋪滿可用畫面 */
-  color: var(--text);
-}
-header {
-  background-color: var(--header);
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-text;
+  }
+  a button {
+    @apply text-accent;
+  }
 }
 
 a button {
-  color: var(--accent);
+  color: hsl(var(--accent));
 }
 a button:hover {
-  background-color: var(--accent-hover);
+  background-color: hsl(var(--accent-hover));
 }
 
 @layer base {
   :root {
-    --background: rgb(240, 231, 219);
-    --foreground: #ffffff40;
-    --header: #ffffff40;
+    --background: 34, 41%, 90%;
+    --foreground: 0, 0%, 100%, 0.25;
+    --text: 220, 26%, 14%;
+    --header: 0, 0%, 100%, 0.25;
     --card: 0 0% 100%;
     --card-foreground: 240 10% 3.9%;
     --popover: 0 0% 100%;
@@ -39,8 +41,8 @@ a button:hover {
     --secondary-foreground: 240 5.9% 10%;
     --muted: 240 4.8% 95.9%;
     --muted-foreground: 240 3.8% 46.1%;
-    --accent: #2c7a7b;
-    --accent-hover: #99e5e6;
+    --accent: 181, 47%, 33%;
+    --accent-hover: 181, 61%, 75%;
     --accent-foreground: 240 5.9% 10%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
@@ -57,29 +59,26 @@ a button:hover {
 
   .dark {
     /* 背景與主要文字 */
-    --background: rgb(32, 32, 35); /* 深灰偏黑背景，比純黑更柔和 */
-    --foreground: #ffffffeb; /* 接近白色，稍透，讓對比足夠 */
-    --text: #ffffffeb;
-    --header: rgb(32, 32, 35);
+    --background: 240, 4%, 13%; /* 深灰偏黑背景，比純黑更柔和 */
+    --foreground: 0, 0%, 100%, 0.08; /* 接近白色，稍透，讓對比足夠 */
+    --text: 0, 0%, 100%, 0.92;
+    --header: 240, 4%, 13%;
 
     /* 主要強調色（Accent） */
-    --accent: #81e6d9; /* 帶藍調的清爽綠 */
+    --accent: 172, 67%, 71%; /* 帶藍調的清爽綠 */
 
     /* 輔助用色（Secondary） */
-    --secondary: #ffffff14; /* 比背景再亮一點的深色，可作區塊區隔 */
+    --secondary: 0, 0%, 100%, 0.078; /* 比背景再亮一點的深色，可作區塊區隔 */
 
     /* 標題文字用色 */
-    --heading: #ffffff; /* 純白可增加焦點對比度 */
+    --heading: 0, 0%, 100%, 0.92; /* 純白可增加焦點對比度 */
 
     /* 互動元素的 hover 或 active 狀態 */
-    --accent-hover: #20c5b580; /* 可在 hover / active 時加強互動感 */
-
-    /* 額外點綴色，可做為特殊元素或提示色 */
-    --theme-toggle: #fbd38d; /* 偏金色，增加層次感 */
+    --accent-hover: 174, 72%, 45%, 0.502; /* 可在 hover / active 時加強互動感 */
 
     /* 範例：若需要邊框或陰影顏色，可再增加 */
-    --border: #ffffff1a; /* 輕微白色半透明作為邊框 */
-    --shadow: rgba(0, 0, 0, 0.5); /* 常見深色背景陰影 */
+    --border: 0, 0%, 100%, 0.102; /* 輕微白色半透明作為邊框 */
+    --shadow: 0, 0%, 0%, 0.5; /* 常見深色背景陰影 */
     /* 
     --card: 240 10% 3.9%;
     --card-foreground: 0 0% 98%;
@@ -110,7 +109,7 @@ a button:hover {
       border-radius: 8px;
     }
     .theme-toggle {
-      background-color: var(--theme-toggle);
+      background-color: #fbd38d;
       color: black;
       /* padding: 0.8rem 1.5rem; */
       border-radius: 4px;

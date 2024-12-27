@@ -3,7 +3,6 @@ import {
   IconBrandGithubFilled,
   IconCoinBitcoinFilled,
   IconMail,
-  IconUserSquareRounded,
 } from '@tabler/icons-react';
 
 const page = () => {
@@ -16,7 +15,6 @@ const page = () => {
               <h1 className='text-3xl font-bold'>謝子崴</h1>
               <p className='mt-2'>專注於 Web 開發技術的學習與實踐</p>
             </div>
-            <IconUserSquareRounded className='w-[150px] h-[150px]' />
           </div>
 
           {/* 自我介紹 */}
