@@ -10,7 +10,7 @@ const headerLink = [
     href: '/resume',
     node: (
       <Link key='resume' href='/resume'>
-        Resume{' '}
+        Resume
       </Link>
     ),
   },
@@ -37,21 +37,23 @@ const Header = () => {
       <div className='w-[768px]'>
         <div className='mx-auto py-3 flex justify-between items-center'>
           {/* Logo */}
-          <div className='text-xl font-bold'>
+          <div className='text-xl font-bold p-2'>
             <Link href='/' className='hover:underline'>
               Weston&apos;s Blog
             </Link>
           </div>
 
           {/* Navigation */}
-          <nav className='flex'>
+          <nav className='flex gap-4'>
             {headerLink.map((link) => (
               <FloatUp key={link.name}>{link.node}</FloatUp>
             ))}
           </nav>
 
           {/* Theme Toggle */}
-          <ThemeToggle />
+          <div className='p-2'>
+            <ThemeToggle />
+          </div>
         </div>
       </div>
     </header>
