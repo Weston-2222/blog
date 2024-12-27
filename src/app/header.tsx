@@ -35,7 +35,7 @@ const Header = () => {
   return (
     <header className='flex justify-center w-full bg-foreground'>
       <div className='w-[768px]'>
-        <div className='mx-auto px-4 py-3 flex justify-between items-center'>
+        <div className='mx-auto py-3 flex justify-between items-center'>
           {/* Logo */}
           <div className='text-xl font-bold'>
             <Link href='/' className='hover:underline'>
@@ -44,7 +44,7 @@ const Header = () => {
           </div>
 
           {/* Navigation */}
-          <nav className='flex space-x-16'>
+          <nav className='flex'>
             {headerLink.map((link) => (
               <FloatUp key={link.name}>{link.node}</FloatUp>
             ))}
