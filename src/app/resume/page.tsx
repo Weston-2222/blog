@@ -21,6 +21,7 @@ const page = () => {
 
             <div className='space-y-1 text-sm md:text-base flex flex-col items-end'>
               <div className='flex items-center gap-2'>
+                <IconMail className='h-4.5 w-4.5' />
                 <p>weston.workmail@gmail.com</p>
                 <CopyButton
                   command='weston.workmail@gmail.com'
@@ -105,26 +106,26 @@ const page = () => {
 
             <div>
               <h3 className='text-xl font-semibold mb-4'>連結</h3>
-              <p className='leading-relaxed mb-2'>
+              <p className='leading-relaxed mb-2 flex items-center gap-1'>
                 我的專案：
-                <a
-                  href='#'
-                  className='text-blue-600 hover:underline'
-                  target='_blank'
-                  rel='noopener noreferrer'
-                >
-                  一個加密貨幣資訊收集網站
+                <a href='#' target='_blank' rel='noopener noreferrer'>
+                  <button className='rounded-md p-1 flex items-center gap-1'>
+                    <IconCoinBitcoinFilled className='h-5 w-5' />
+                    加密貨幣資訊收集網站
+                  </button>
                 </a>
               </p>
-              <p className='leading-relaxed'>
+              <p className='leading-relaxed flex items-center gap-1'>
                 GitHub：
                 <a
                   href='https://github.com/Weston-2222'
-                  className='text-blue-600 hover:underline'
                   target='_blank'
                   rel='noopener noreferrer'
                 >
-                  @Weston-2222
+                  <button className='rounded-md p-1 flex items-center gap-1'>
+                    <IconBrandGithubFilled className='h-5 w-5' />
+                    @Weston-2222
+                  </button>
                 </a>
               </p>
             </div>

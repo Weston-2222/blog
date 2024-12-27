@@ -9,7 +9,7 @@ const headerLink = [
     name: 'Resume',
     href: '/resume',
     node: (
-      <Link key='resume' href='/resume'>
+      <Link key='resume' href='/resume' className='p-1'>
         Resume
       </Link>
     ),
@@ -22,7 +22,7 @@ const headerLink = [
         key='github'
         target='_blank'
         href='https://github.com/weston-2222'
-        className='flex items-center gap-1'
+        className='flex items-center gap-1 p-1'
       >
         <IconBrandGithubFilled className='w-5 h-5' />
         GitHub
@@ -44,7 +44,7 @@ const Header = () => {
           </div>
 
           {/* Navigation */}
-          <nav className='flex gap-4'>
+          <nav className='flex gap-4 items-center'>
             {headerLink.map((link) => (
               <FloatUp key={link.name}>{link.node}</FloatUp>
             ))}
