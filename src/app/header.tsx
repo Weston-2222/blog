@@ -1,7 +1,7 @@
 'use client';
 import FloatUp from '../components/framer/floatUp';
 import ThemeToggle from '@/components/themeToggle';
-import { IconBrandGithubFilled } from '@tabler/icons-react';
+import { IconBrandGithubFilled, IconClipboardText } from '@tabler/icons-react';
 import Link from 'next/link';
 
 const headerLink = [
@@ -9,7 +9,8 @@ const headerLink = [
     name: 'Resume',
     href: '/resume',
     node: (
-      <Link key='resume' href='/resume' className='p-1'>
+      <Link key='resume' href='/resume' className='p-1 flex items-center gap-1'>
+        <IconClipboardText className='h-5 w-5' />
         Resume
       </Link>
     ),
