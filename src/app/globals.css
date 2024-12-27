@@ -42,7 +42,7 @@ a button:hover {
     --muted: 240 4.8% 95.9%;
     --muted-foreground: 240 3.8% 46.1%;
     --accent: 181, 47%, 33%;
-    --accent-hover: 181, 61%, 75%;
+    --accent-hover: 181, 61%, 75%, 0.5;
     --accent-foreground: 240 5.9% 10%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
@@ -65,7 +65,7 @@ a button:hover {
     --header: 240, 4%, 13%;
 
     /* 主要強調色（Accent） */
-    --accent: 172, 67%, 71%; /* 帶藍調的清爽綠 */
+    --accent: 172, 67%, 70%; /* 帶藍調的清爽綠 */
 
     /* 輔助用色（Secondary） */
     --secondary: 0, 0%, 100%, 0.078; /* 比背景再亮一點的深色，可作區塊區隔 */
@@ -74,7 +74,7 @@ a button:hover {
     --heading: 0, 0%, 100%, 0.92; /* 純白可增加焦點對比度 */
 
     /* 互動元素的 hover 或 active 狀態 */
-    --accent-hover: 174, 72%, 45%, 0.502; /* 可在 hover / active 時加強互動感 */
+    --accent-hover: 174, 72%, 45%, 0.15; /* 可在 hover / active 時加強互動感 */
 
     /* 範例：若需要邊框或陰影顏色，可再增加 */
     --border: 0, 0%, 100%, 0.102; /* 輕微白色半透明作為邊框 */

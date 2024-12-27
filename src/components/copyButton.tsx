@@ -1,14 +1,16 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 import { Copy, Check } from 'lucide-react';
 import { useState } from 'react';
 
 interface CopyButtonProps {
   command: string;
+  className?: string;
 }
 
-export default function CopyButton({ command }: CopyButtonProps) {
+export default function CopyButton({ command, className }: CopyButtonProps) {
   const [copied, setCopied] = useState(false);
 
   const copyToClipboard = () => {
@@ -21,7 +23,7 @@ export default function CopyButton({ command }: CopyButtonProps) {
     <Button
       variant='outline'
       size='icon'
-      className='relative rounded-md'
+      className={cn('relative rounded-md', className)}
       onClick={copyToClipboard}
       aria-label={copied ? 'Copied' : 'Copy to clipboard'}
     >
