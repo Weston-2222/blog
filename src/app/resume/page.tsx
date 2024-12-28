@@ -58,9 +58,8 @@ const page = () => {
             </p>
             <p className='leading-relaxed mb-2'>
               目前我正開發一個加密貨幣資訊網站，串接 Coingecko API
-              以獲取市場資訊，已完成使用者註冊、登入與 Mock
-              倉位功能。未來將逐步加入 OAuth
-              登入、倉位計算與投資組合績效評估等功能。
+              以獲取市場資訊，已完成使用者註冊、登入與收藏功能。未來將逐步加入
+              OAuth 登入、倉位計算與投資組合績效評估等功能。
             </p>
             <p className='leading-relaxed mb-2'>
               開發過程中，由於 Next.js 13 新增 App Route
