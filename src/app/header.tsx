@@ -35,7 +35,7 @@ const Header = () => {
   return (
     <header className='flex justify-center w-full bg-foreground'>
       <div className='w-[752px]'>
-        <div className='mx-auto py-1 flex justify-between items-center'>
+        <div className='mx-auto py-1 px-2 flex justify-between items-center'>
           {/* Logo */}
           <div className='text-xl font-bold p-2'>
             <Link href='/' className='hover:underline'>
