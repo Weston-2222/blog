@@ -4,7 +4,7 @@ import 'tailwindcss/tailwind.css';
 import './globals.css';
 import Header from './header';
 import Footer from './footer';
-import PageTransitionEffect from '@/components/framer/fade';
+import PageTransitionEffect from '@/components/framer/pageTransitionEffect';
 
 const notoSans = Noto_Sans_TC({
   subsets: ['latin'], // 選擇需要的字集，可選 'latin', 'latin-ext', 'cyrillic', 等
