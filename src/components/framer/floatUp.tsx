@@ -1,3 +1,4 @@
+'use client';
 import { motion } from 'framer-motion';
 
 const FloatUp = ({ children }: { children: React.ReactNode }) => {
