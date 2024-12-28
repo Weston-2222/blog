@@ -31,7 +31,7 @@ const headerLink = [
 ];
 const Footer: React.FC = () => {
   return (
-    <footer className=' text-center w-full bg-foreground'>
+    <footer className='text-center w-full bg-foreground p-4'>
       <div className='flex justify-center gap-4 mt-2'>
         <nav className='flex gap-4 items-center'>
           {headerLink.map((link) => (
