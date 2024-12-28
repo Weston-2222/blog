@@ -4,6 +4,8 @@ import 'tailwindcss/tailwind.css';
 import './globals.css';
 import Header from './header';
 import Footer from './footer';
+import PageTransitionEffect from '@/components/framer/pageTransitionEffect';
+
 const notoSans = Noto_Sans_TC({
   subsets: ['latin'], // 選擇需要的字集，可選 'latin', 'latin-ext', 'cyrillic', 等
   weight: ['400', '700'], // 加載需要的字重
@@ -21,7 +23,9 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
           <main className='flex flex-col items-center'>
             <Header />
-            <div className='max-w-2xl p-6'>{children}</div>
+            <PageTransitionEffect>
+              <div className='max-w-2xl p-6'>{children}</div>
+            </PageTransitionEffect>
             <Footer />
           </main>
         </ThemeProvider>
