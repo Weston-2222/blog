@@ -25,11 +25,17 @@ a button:hover {
   background-color: hsl(var(--accent-hover));
 }
 
+mark {
+  color: hsl(var(--mark));
+  background-color: transparent;
+}
+
 @layer base {
   :root {
     --background: 34, 41%, 90%;
     --foreground: 0, 0%, 100%, 0.25;
     --text: 220, 26%, 14%;
+    --mark: 219, 83%, 58%, 0.9;
     --header: 0, 0%, 100%, 0.25;
     --card: 0 0% 100%;
     --card-foreground: 240 10% 3.9%;
@@ -63,6 +69,7 @@ a button:hover {
     --foreground: 0, 0%, 100%, 0.08; /* 接近白色，稍透，讓對比足夠 */
     --text: 0, 0%, 100%, 0.92;
     --header: 240, 4%, 13%;
+    --mark: 323, 100%, 69%, 0.9;
 
     /* 主要強調色（Accent） */
     --accent: 172, 67%, 70%; /* 帶藍調的清爽綠 */
