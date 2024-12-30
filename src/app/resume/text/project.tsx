@@ -2,8 +2,8 @@ import { IconCoinBitcoinFilled } from '@tabler/icons-react';
 
 const Project = () => {
   return (
-    <section>
-      <h3 className='text-2xl font-bold pb-2'>Project</h3>
+    <section className='space-y-2'>
+      <h3 className='text-2xl font-bold'>Project</h3>
       <p>
         &nbsp;&nbsp;&nbsp;&nbsp;目前我正開發一個加密貨幣資訊網站，串接 Coingecko
         API
