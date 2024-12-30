@@ -1,3 +1,4 @@
+import NavBarMenu from '@/components/navBarMenu';
 import FloatUp from '../components/framer/floatUp';
 import ThemeToggle from '@/components/themeToggle';
 import { IconBrandGithubFilled, IconClipboardText } from '@tabler/icons-react';
@@ -31,32 +32,33 @@ const headerLink = [
   },
 ];
 
-const Header = () => {
+const Header = ({ className }: { className: string }) => {
   return (
-    <header className='flex justify-center w-full bg-foreground'>
-      <div className='w-[752px]'>
-        <div className='mx-auto py-1 px-2 flex justify-between items-center'>
+    <div className={className}>
+      <header className='flex justify-center w-full '>
+        <div className='w-[752px] py-1 px-2 flex justify-between items-center'>
           {/* Logo */}
-          <div className='text-xl font-bold p-2'>
-            <Link href='/' className='hover:underline'>
-              Weston&apos;s Blog
-            </Link>
-          </div>
+          <Link href='/' className='text-xl font-bold p-2 hover:underline'>
+            Weston&apos;s Blog
+          </Link>
 
           {/* Navigation */}
-          <nav className='flex gap-4 items-center'>
+          <nav className='hidden sm:flex gap-4 items-center'>
             {headerLink.map((link) => (
               <FloatUp key={link.name}>{link.node}</FloatUp>
             ))}
           </nav>
 
-          {/* Theme Toggle */}
-          <div className='p-2'>
+          <div className='flex items-center gap-2'>
+            {/* Mobile Menu */}
+            <NavBarMenu className='sm:hidden' menuBarList={headerLink} />
+
+            {/* Theme Toggle */}
             <ThemeToggle />
           </div>
         </div>
-      </div>
-    </header>
+      </header>
+    </div>
   );
 };
 
