@@ -19,15 +19,18 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         <title>Weston&apos;s Blog</title>
       </head>
 
-      <body className={notoSans.className}>
+      <body
+        className={`${notoSans.className} min-h-screen flex flex-col overflow-x-hidden`}
+      >
         <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
-          <main className='flex flex-col items-center'>
-            <Header />
+          <main className='flex-grow flex flex-col items-center w-full'>
+            <Header className='fixed top-0 left-0 w-full z-1 h-[56px] bg-foreground backdrop-blur-sm' />
+            <div className='w-full h-[56px]'></div>
             <PageTransitionEffect>
-              <div className='max-w-2xl p-6'>{children}</div>
+              <div className='max-w-2xl p-6 w-full'>{children}</div>
             </PageTransitionEffect>
-            <Footer />
           </main>
+          <Footer />
         </ThemeProvider>
       </body>
     </html>
