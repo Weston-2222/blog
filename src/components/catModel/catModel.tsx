@@ -26,6 +26,7 @@ const CatModel = ({ className }: { className?: string }) => {
     clock: new THREE.Clock(),
     catMesh: null, // 模型引用，用于动态更新颜色
     animationLoopRunning: false, // 动画循环状态
+    model: null,
   });
   // 更新模型颜色
   const updateModelColor = () => {
@@ -49,7 +50,7 @@ const CatModel = ({ className }: { className?: string }) => {
     }
 
     // 加载模型
-    loadModel(sceneRef, updateModelColor);
+    loadModel(sceneRef, mountRef, updateModelColor);
     // 动画循环
     sceneRef.current.animationLoopRunning = true;
 
@@ -62,9 +63,18 @@ const CatModel = ({ className }: { className?: string }) => {
     const handleVisibility = () => handleVisibilityChange(sceneRef);
     document.addEventListener('visibilitychange', handleVisibility);
 
+    // 監聽視窗大小變化
+    // const handleResize = () => {
+    //   if (sceneRef.current.camera && sceneRef.current.renderer) {
+    //     setRendererSize(sceneRef);
+    //     setModelSize(sceneRef, mountRef);
+    //   }
+    // };
+    // window.addEventListener('resize', handleResize);
     // Cleanup
     return () => {
       document.removeEventListener('visibilitychange', handleVisibility);
+      // window.removeEventListener('resize', handleResize);
       clearThree(sceneRef, mountRef);
       // 重置场景状态，确保重新挂载时可以正常加载
 
