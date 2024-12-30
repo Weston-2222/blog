@@ -24,7 +24,7 @@ export const initThree = (
   camera.position.z = 5;
 
   const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-  renderer.setSize(500, 500);
+  renderer.setSize(500, 300);
 
   const controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
@@ -86,8 +86,8 @@ export const loadModel = (
         }
       });
       const model = gltf.scene;
-      model.position.set(0, -1, 0);
-      model.scale.set(0.08, 0.08, 0.08); // 调整模型比例
+      model.position.set(0, -2, 0);
+      model.scale.set(0.08, 0.133, 0.08); // 调整模型比例
       sceneRef.current.scene?.add(model);
       // 动画处理
       if (gltf.animations.length > 0) {
