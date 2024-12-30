@@ -13,7 +13,7 @@ const CatModel = dynamic(
 );
 const page = () => {
   return (
-    <div className='fixed top-0 left-1/2 transform -translate-x-1/2 z-[-1]'>
+    <div>
       <CatModel />
     </div>
   );
