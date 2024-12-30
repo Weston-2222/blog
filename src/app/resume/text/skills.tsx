@@ -17,13 +17,16 @@ const content = [
         熟悉 <mark>Next.js</mark> 與 <mark>TypeScript</mark>，能開發
         SSR、SSG、ISR、CSR 等渲染模式。
       </p>,
+      <p key='5'>
+        了解 <mark>Three.js</mark> 的應用，能在網頁中實現3D效果。
+      </p>,
     ],
   },
   {
     title: '後端與資料庫開發技能',
     content: [
       <p key='1'>
-        熟悉 <mark>Express、Nest.js、Flask</mark> 等後端框架的應用。
+        使用過 <mark>Express、Nest.js、Flask</mark> 等後端框架的應用。
       </p>,
       <p key='2'>
         了解 <mark>GraphQL</mark> 與 <mark>RESTful API</mark> 的開發與應用。
@@ -67,7 +70,7 @@ const Skills = () => {
       <h3 className='text-2xl font-bold'>Skills</h3>
       <div className='flex flex-wrap space-y-2'>
         {content.map((item, index) => (
-          <section key={index} className='lg:w-1/2 p-4'>
+          <section key={index} className='lg:w-1/2 p-2'>
             <h4 className='text-xl font-bold'>{item.title}</h4>
             <ul className='list-disc pl-6'>
               {item.content.map((content, index) => (
