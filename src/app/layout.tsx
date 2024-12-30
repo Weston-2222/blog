@@ -20,7 +20,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       </head>
 
       <body
-        className={`${notoSans.className} min-h-screen flex flex-col overflow-x-hidden`}
+        className={`${notoSans.className} min-h-screen flex flex-col w-full`}
       >
         <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
           <main className='flex-grow flex flex-col items-center w-full'>
