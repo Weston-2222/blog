@@ -14,7 +14,8 @@ const CatModel = dynamic(
 const page = () => {
   return (
     <div>
-      <CatModel />
+      {/* <CatModel /> */}
+      網站架設中
     </div>
   );
 };
