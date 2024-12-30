@@ -11,7 +11,7 @@ import {
   SceneRef,
 } from './threeSetting';
 
-const CatModel = () => {
+const CatModel = ({ className }: { className?: string }) => {
   const darkMeshColor = 0xff60c2;
   const lightMeshColor = 0x3b79ec;
   const mountRef = useRef<HTMLDivElement | null>(null);
@@ -72,7 +72,7 @@ const CatModel = () => {
     };
   }, []);
 
-  return <div ref={mountRef} className='w-[500px] h-[500px] mx-auto'></div>;
+  return <div ref={mountRef} className={className}></div>;
 };
 
 export default CatModel;
