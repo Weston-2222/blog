@@ -25,7 +25,7 @@ export const initThree = (
   camera.position.z = 5;
 
   const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-  //   renderer.setSize(500, 300);
+  renderer.setPixelRatio(window.devicePixelRatio || 1); // 设置像素比
 
   const controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
@@ -158,7 +158,7 @@ export const setRendererSize = (sceneRef: RefObject<SceneRef>) => {
 
   // 根据屏幕宽度分类设置渲染器大小
   if (window.innerWidth > 768) {
-    renderer.setSize(800, 480); // 中屏幕
+    renderer.setSize(600, 360); // 中屏幕
   } else if (window.innerWidth > 480) {
     renderer.setSize(400, 240); // 小屏幕
   } else {
