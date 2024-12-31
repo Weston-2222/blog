@@ -23,7 +23,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         className={`${notoSans.className} min-h-screen flex flex-col w-full`}
       >
         <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
-          <main className='flex-grow flex flex-col items-center w-full'>
+          <main className='flex-grow flex flex-col items-center w-full h-full'>
             <Header className='fixed top-0 left-0 w-full z-1 h-[56px] bg-foreground backdrop-blur-sm' />
             <div className='w-full h-[56px]'></div>
             <PageTransitionEffect>

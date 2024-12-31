@@ -44,7 +44,7 @@ export const initThree = (
   sceneRef.current.camera = camera;
   sceneRef.current.renderer = renderer;
   sceneRef.current.controls = controls;
-  //setRendererSize(sceneRef);
+  setRendererSize(sceneRef);
 };
 
 // 動畫函數
@@ -91,7 +91,7 @@ export const loadModel = (
       const model = gltf.scene;
       sceneRef.current.model = model;
       model.position.set(0, -2, 0);
-      // setModelSize(sceneRef, mountRef); // 调整模型比例
+      setModelSize(sceneRef); // 调整模型比例
       sceneRef.current.scene?.add(model);
       // 动画处理
       if (gltf.animations.length > 0) {
@@ -152,29 +152,21 @@ export const clearThree = (
 };
 
 //模型大小對照表
-// export const setRendererSize = (sceneRef: RefObject<SceneRef>) => {
-//   const { renderer } = sceneRef.current || {};
-//   if (!renderer) return;
+export const setRendererSize = (sceneRef: RefObject<SceneRef>) => {
+  const { renderer } = sceneRef.current || {};
+  if (!renderer) return;
 
-//   // 根据屏幕宽度分类设置渲染器大小
-//   if (window.innerWidth > 1200) {
-//     renderer.setSize(1200, 720); // 大屏幕
-//   } else if (window.innerWidth > 768) {
-//     renderer.setSize(500, 300); // 中屏幕
-//   } else {
-//     renderer.setSize(400, 240); // 小屏幕
-//   }
-// };
-// export const setModelSize = (sceneRef: RefObject<SceneRef>) => {
-//   const { model } = sceneRef.current || {};
-//   if (!model) return;
-
-//   // 根据屏幕宽度分类设置模型比例
-//   if (window.innerWidth > 1200) {
-//     model.scale.set(0.08, 0.133, 0.08); // 大屏幕模型大小
-//   } else if (window.innerWidth > 768) {
-//     model.scale.set(0.08, 0.133, 0.08); // 中屏幕模型大小
-//   } else {
-//     model.scale.set(0.04, 0.0665, 0.04); // 小屏幕模型大小
-//   }
-// };
+  // 根据屏幕宽度分类设置渲染器大小
+  if (window.innerWidth > 768) {
+    renderer.setSize(800, 480); // 中屏幕
+  } else if (window.innerWidth > 480) {
+    renderer.setSize(400, 240); // 小屏幕
+  } else {
+    renderer.setSize(300, 180); // 超小屏幕
+  }
+};
+export const setModelSize = (sceneRef: RefObject<SceneRef>) => {
+  const { model } = sceneRef.current || {};
+  if (!model) return;
+  model.scale.set(0.08, 0.133, 0.08);
+};
