@@ -159,10 +159,8 @@ export const setRendererSize = (sceneRef: RefObject<SceneRef>) => {
   // 根据屏幕宽度分类设置渲染器大小
   if (window.innerWidth > 768) {
     renderer.setSize(600, 360); // 中屏幕
-  } else if (window.innerWidth > 480) {
-    renderer.setSize(400, 240); // 小屏幕
   } else {
-    renderer.setSize(300, 180); // 超小屏幕
+    renderer.setSize(window.innerWidth * 0.8, window.innerWidth * 0.8 * 0.6); // 小屏幕
   }
 };
 export const setModelSize = (sceneRef: RefObject<SceneRef>) => {
