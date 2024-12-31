@@ -9,6 +9,8 @@ import {
   initThree,
   loadModel,
   SceneRef,
+  setModelSize,
+  setRendererSize,
 } from './threeSetting';
 
 const CatModel = ({ className }: { className?: string }) => {
@@ -64,13 +66,13 @@ const CatModel = ({ className }: { className?: string }) => {
     document.addEventListener('visibilitychange', handleVisibility);
 
     // 監聽視窗大小變化
-    // const handleResize = () => {
-    //   if (sceneRef.current.camera && sceneRef.current.renderer) {
-    //     setRendererSize(sceneRef);
-    //     setModelSize(sceneRef, mountRef);
-    //   }
-    // };
-    // window.addEventListener('resize', handleResize);
+    const handleResize = () => {
+      if (sceneRef.current.camera && sceneRef.current.renderer) {
+        setRendererSize(sceneRef);
+        setModelSize(sceneRef);
+      }
+    };
+    window.addEventListener('resize', handleResize);
     // Cleanup
     return () => {
       document.removeEventListener('visibilitychange', handleVisibility);
