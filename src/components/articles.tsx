@@ -5,7 +5,7 @@ import path from 'path';
 import { articlesMetadataPromise } from '@/articles/articlesConfig';
 const Articles = async () => {
   const articlesMetadata = await articlesMetadataPromise;
-  console.log(articlesMetadata);
+
   return (
     <div>
       {articlesMetadata.map((article) => (
