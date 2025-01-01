@@ -1,5 +1,4 @@
-@import '@/styles/prism/prism-plus.css';
-@import '@/styles/prism/prism-dracula.css';
+@import '@/styles/prism/index.css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -127,19 +126,4 @@ mark {
       cursor: pointer;
     }
   }
-}
-.rehype-code-title {
-  margin-bottom: -0.6rem;
-  padding: 0.5em 1em;
-  font-family: Consolas, 'Andale Mono WT', 'Andale Mono', 'Lucida Console',
-    'Lucida Sans Typewriter', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono',
-    'Liberation Mono', 'Nimbus Mono L', Monaco, 'Courier New', Courier,
-    monospace;
-
-  background-color: black;
-  color: white;
-  z-index: 0;
-
-  border-top-left-radius: 0.3em;
-  border-top-right-radius: 0.3em;
 }
