@@ -1,11 +1,10 @@
 import { ThemeProvider } from '@/components/theme-provider';
 import { Noto_Sans_TC } from 'next/font/google';
 import 'tailwindcss/tailwind.css';
-import './globals.css';
+import '@/styles/globals.css';
 import Header from './header';
 import Footer from './footer';
 import PageTransitionEffect from '@/components/framer/pageTransitionEffect';
-
 const notoSans = Noto_Sans_TC({
   subsets: ['latin'], // 選擇需要的字集，可選 'latin', 'latin-ext', 'cyrillic', 等
   weight: ['400', '700'], // 加載需要的字重
@@ -26,9 +25,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           <main className='flex-grow flex flex-col items-center w-full h-full'>
             <Header className='fixed top-0 left-0 w-full z-1 h-[56px] bg-foreground backdrop-blur-sm' />
             <div className='w-full h-[56px]'></div>
-            <PageTransitionEffect>
-              <div className='max-w-2xl p-6 w-full'>{children}</div>
-            </PageTransitionEffect>
+            <PageTransitionEffect>{children}</PageTransitionEffect>
           </main>
           <Footer />
         </ThemeProvider>

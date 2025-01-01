@@ -6,7 +6,7 @@ import Title from './text/title';
 
 const page = () => {
   return (
-    <article className='space-y-6'>
+    <article className='space-y-6 max-w-2xl p-6'>
       <Title />
 
       <AboutMe />
