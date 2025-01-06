@@ -1,7 +1,14 @@
 'use client';
+import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
 
-const FloatUp = ({ children }: { children: React.ReactNode }) => {
+const FloatUp = ({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) => {
   const hoverAnimation = {
     scale: 1.1,
     y: -5,
@@ -11,7 +18,7 @@ const FloatUp = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
       <motion.div
-        className='rounded-lg cursor-pointer text-center'
+        className={cn('rounded-lg cursor-pointer text-center', className)}
         whileHover={hoverAnimation}
         transition={{ type: 'spring', stiffness: 300 }}
       >
