@@ -1,6 +1,5 @@
-import Image from 'next/image';
 import Link from 'next/link';
-
+import CldImage from '@/components/cldImage';
 import { ArticleMetadata, postsPromise } from '@/articles/articlesConfig';
 
 import { cn } from '@/lib/utils';
@@ -24,12 +23,11 @@ const Articles = async ({ className }: ArticlesProps) => {
             className
           )}
         >
-          <Image
+          <CldImage
+            width='350'
+            height='350'
             src={article.image}
             alt={article.title}
-            width={350}
-            height={350}
-            className='object-cover'
           />
           <p className='text-xl font-bold pt-2'>{article.title}</p>
           <p className='text-sm text-gray-500'>{article.description}</p>

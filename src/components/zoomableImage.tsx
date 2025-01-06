@@ -1,9 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
+import { CldImage } from 'next-cloudinary';
 
 interface ZoomableImageProps {
   src: string;
@@ -16,8 +16,8 @@ interface ZoomableImageProps {
 const ZoomableImage: React.FC<ZoomableImageProps> = ({
   src,
   alt = '',
-  width = 300,
-  height = 200,
+  width = 624,
+  height = 351,
   className,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -37,7 +37,7 @@ const ZoomableImage: React.FC<ZoomableImageProps> = ({
         className={cn('inline-block cursor-pointer', className)}
         onClick={handleOpen}
       >
-        <Image
+        <CldImage
           src={src}
           alt={alt}
           width={width}
@@ -64,11 +64,12 @@ const ZoomableImage: React.FC<ZoomableImageProps> = ({
               exit={{ scale: 0.8, opacity: 0 }}
               onClick={(e) => e.stopPropagation()}
             >
-              <Image
+              <CldImage
                 src={src}
                 alt={alt}
-                width={1000}
-                height={1000}
+                width={width}
+                height={height}
+                sizes='100vw'
                 className='object-contain max-h-[100vh] max-w-[100vw]'
               />
               {/* 關閉按鈕 */}

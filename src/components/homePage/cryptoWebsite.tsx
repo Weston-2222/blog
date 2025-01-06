@@ -1,8 +1,6 @@
 'use client';
-import 'client-only'; // Next.js Client Component 宣告
-
+import 'client-only';
 import { cn } from '@/lib/utils';
-import Image from 'next/image';
 import {
   IconCoinBitcoinFilled,
   IconExternalLink,
@@ -12,6 +10,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import RetroGrid from '../ui/retro-grid';
 import Link from 'next/link';
+import { CldImage } from 'next-cloudinary';
 
 // 可傳入 className 作為額外的樣式
 type ResumeBlockProps = {
@@ -153,20 +152,30 @@ const CryptoWebsite = ({ className }: ResumeBlockProps) => {
       >
         {/* Bitcoin 圖示 */}
         <motion.div variants={iconVariants}>
-          <Image src='/icons/bitcoin.png' alt='crypto' width={50} height={50} />
+          <CldImage
+            width='50'
+            height='50'
+            src='bitcoin-icon'
+            alt='bitcoin-icon'
+          />
         </motion.div>
         {/* Ethereum 圖示 */}
         <motion.div variants={iconVariants}>
-          <Image
-            src='/icons/ethereum.png'
-            alt='crypto'
-            width={50}
-            height={50}
+          <CldImage
+            width='50'
+            height='50'
+            src='ethereum-icon'
+            alt='ethereum-icon'
           />
         </motion.div>
         {/* Cardano 圖示 */}
         <motion.div variants={iconVariants}>
-          <Image src='/icons/cardano.png' alt='crypto' width={50} height={50} />
+          <CldImage
+            width='50'
+            height='50'
+            src='cardano-icon'
+            alt='cardano-icon'
+          />
         </motion.div>
       </motion.div>
     </motion.div>
