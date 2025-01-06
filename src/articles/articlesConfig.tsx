@@ -10,7 +10,7 @@ export type ArticleMetadata = Metadata & {
 export const articlePath = 'src/articles';
 
 export const articlesMetadataPromise: Promise<ArticleMetadata[]> = Promise.all([
-  import('@/articles/test.mdx'),
+  import('@/articles/treejs-two-pitfalls/treejs-two-pitfalls.mdx'),
 ]).then((modules) =>
   modules.map((module) => module.metadata as ArticleMetadata)
 );
