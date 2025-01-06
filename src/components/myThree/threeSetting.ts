@@ -2,7 +2,6 @@ import { RefObject, useRef } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader.js';
 
 export type threeRef = {
   scene: THREE.Scene | null;

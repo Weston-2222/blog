@@ -1,4 +1,5 @@
 import type { Metadata } from 'next/types';
+
 export type ArticleMetadata = Metadata & {
   title: string;
   description: string;

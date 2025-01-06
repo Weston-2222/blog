@@ -62,7 +62,7 @@ const Cat = () => {
     if (catModelRef.current && theme) {
       updateModelColor(catModelRef.current, theme);
     }
-  }, [theme]);
+  }, [theme, catModelRef]);
 
   return <MyThree ref={catModelRef} initSetting={initSetting} />; // 渲染 MyThree 元件
 };

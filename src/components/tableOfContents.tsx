@@ -4,6 +4,8 @@ import { visit } from 'unist-util-visit';
 import { ArticleMetadata } from '@/articles/articlesConfig';
 import fs from 'fs/promises';
 import path from 'path';
+import { Node, Parent } from 'unist';
+
 const TableOfContents = async ({
   metadata,
   className,
@@ -22,10 +24,10 @@ const TableOfContents = async ({
   const tree = unified().use(remarkParse).parse(markdown);
 
   // 遍歷 AST，提取標題
-  visit(tree, 'heading', (node: any) => {
+  visit(tree, 'heading', (node: Parent) => {
     const text = node.children
-      .filter((child: any) => child.type === 'text')
-      .map((child: any) => child.value)
+      .filter((child: Node) => child.type === 'text')
+      .map((child: Node) => child.data)
       .join('');
     headings.push(text);
   });

@@ -57,7 +57,7 @@ const ExampleModel = () => {
         action.timeScale = animationSpeed; // 設置動畫速度，1.0為正常速度
       }
     });
-  }, [animationSpeed]);
+  }, [animationSpeed, catModelRef]);
   // 初始化設定
   const initSetting = {
     modelPath: '/cat.glb',
@@ -77,7 +77,7 @@ const ExampleModel = () => {
     if (catModelRef.current && theme) {
       updateModelColor(catModelRef.current, theme);
     }
-  }, [theme]);
+  }, [theme, catModelRef]);
   const colorList = [
     0xff60c2, // 粉紅色
     0x3b79ec, // 藍色

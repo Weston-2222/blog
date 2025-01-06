@@ -30,7 +30,8 @@
     "tailwind.config.ts",
     "next.config.mjs",
     "src/articles/treejs-two-pitfalls/treejs-two-pitfalls.mdx",
-    "src/styles/codaBlock.js"
+    "src/styles/codaBlock.js",
+    "src/articles/mdx.d.ts"
   ],
   "exclude": ["node_modules"]
 }
