@@ -9,11 +9,7 @@ const nextConfig = {
 const withMDX = createMDX({
   options: {
     remarkPlugins: [],
-    rehypePlugins: [
-      ['rehype-code-titles'],
-      ['rehype-prism-plus', { strict: true, throwOnError: true }],
-      ['rehype-slug'],
-    ],
+    rehypePlugins: [['rehype-slug'], ['rehype-mdx-code-props']],
   },
 });
 
