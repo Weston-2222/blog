@@ -6,7 +6,8 @@ export const metadata = {
   description: '我在 Next.js 15 中使用 Three.js 放入3D模型，還有遇到的兩個坑。',
   path: 'article',
   slug: 'treejs-two-pitfalls',
-  date: '2025-01-01',
+  date: '2025-01-06',
+  image: '/articles/threejs-two-pitfalls/threejs-logo.webp',
 };
 
 <ExampleModel />
@@ -149,6 +150,9 @@ export const initThree = (
 
 這邊要注意的是要設置 <mark>renderer.setPixelRatio</mark> 函數來設置像素比，不然我在手機上看模型會很模糊。
 
+### 加載模型函數
+
+：
 接下來是加載模型的函數：
 
 ```tsx foldHeight
@@ -196,7 +200,22 @@ export const loadModel = (sceneRef: RefObject<threeRef>) => {
 
 initSetting 裡有一個參數 isWireframe，這個參數是用來控制是否顯示網格，因為只有網格的模型很酷所以有了這個設定。
 
-動畫函數：
+### 添加光源
+
+```tsx
+export const addLight = (sceneRef: RefObject<threeRef>) => {
+  const ambientLight = new THREE.AmbientLight(0xffffff, 1.5);
+  sceneRef.current?.scene?.add(ambientLight);
+
+  const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
+  directionalLight.position.set(10, 10, 10);
+  sceneRef.current?.scene?.add(directionalLight);
+};
+```
+
+這邊先固定設定，之後要改成由初始設定。
+
+### 動畫函數
 
 ```tsx foldHeight
 // 動畫函數
@@ -227,6 +246,8 @@ export const animate = (sceneRef: RefObject<threeRef>) => {
 ```
 
 動畫函數這邊如果 sceneRef.current.animationLoopRunning 為 false 的話，會暫停動畫，想要恢復動畫的話需要重新執行 animate 函數。
+
+### 處理可見性 節省資源
 
 這邊有一個處理可見性的函數，當頁面可見時，恢復動畫，當頁面不可見時，暫停動畫，以節省資源。
 

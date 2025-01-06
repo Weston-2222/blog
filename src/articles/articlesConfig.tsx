@@ -5,6 +5,7 @@ export type ArticleMetadata = Metadata & {
   path: string;
   slug: string;
   date: string;
+  image: string;
 };
 
 export const articlePath = 'src/articles';
