@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { FileUser } from 'lucide-react';
 
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 
 type ResumeBlockProps = {
   className?: string;
@@ -92,17 +93,13 @@ const ResumeBlock = ({ className }: ResumeBlockProps) => {
           transition={{ duration: 0.3 }}
           className='absolute bottom-15 left-[15px] transform -translate-x-1/2 px-4 py-2  rounded'
         >
-          <a
-            href='https://crypto-website-nextjs-delta.vercel.app'
-            target='_blank'
-            rel='noopener noreferrer'
-          >
+          <Link href='/resume'>
             <button className='rounded-md p-1 flex items-center'>
               <FileUser className='h-5 w-5' />
               Resume
               <IconArrowRight stroke={2} className='h-4 w-4' />
             </button>
-          </a>
+          </Link>
         </motion.div>
       </div>
     </>

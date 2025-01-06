@@ -9,15 +9,15 @@ export const metadata = {
 
 const page = async () => {
   return (
-    <div className='h-screen'>
+    <div className='pb-4'>
       <div className='flex justify-center items-center w-full'>
         <Cat />
       </div>
-      <div className='flex flex-wrap justify-center items-center gap-4'>
-        <ResumeBlock className='w-[320px]' />{' '}
-        <CryptoWebsite className='w-[320px]' />
+      <div className='flex flex-wrap justify-center items-center gap-4 max-w-[750px]'>
+        <ResumeBlock className='w-[350px]' />
+        <CryptoWebsite className='w-[350px]' />
+        <Articles className='w-[350px]' />
       </div>
-      <Articles />
     </div>
   );
 };

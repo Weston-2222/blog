@@ -102,24 +102,17 @@ export const loadModel = (sceneRef: RefObject<threeRef>) => {
             child.material = material; // 設置材質
             child.material.side = THREE.DoubleSide; // 啟用雙面渲染
             //child.material.emissive = child.material.color; // 添加自發光顏色
-            //child.material.emissiveMap = child.material.map; // 添加自發光貼圖
+            // child.material.emissiveMap = child.material.map; // 添加自發光貼圖
             child.material.color.set(
               sceneRef.current?.initSetting?.meshColor || 0xffffff
             ); // 設置網格顏色
             child.material.wireframe =
               sceneRef.current?.initSetting?.isWireframe || false; // 啟用線框模式
             sceneRef.current?.meshArray.push(child); // 添加到網格陣列
-            // 設置最大各向異性過濾
+
+            child.material.side = THREE.DoubleSide; // 啟用雙面渲染
           }
         });
-
-        //光源
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-        sceneRef.current?.scene?.add(ambientLight);
-
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 8);
-        directionalLight.position.set(10, 10, 10);
-        sceneRef.current?.scene?.add(directionalLight);
 
         const model = gltf.scene;
         model.scale.set(
@@ -160,6 +153,16 @@ export const loadModel = (sceneRef: RefObject<threeRef>) => {
     getFileExtension(sceneRef.current?.initSetting?.modelPath || '') === 'svg'
   ) {
   }
+};
+
+// 添加光源
+export const addLight = (sceneRef: RefObject<threeRef>) => {
+  const ambientLight = new THREE.AmbientLight(0xffffff, 1.5);
+  sceneRef.current?.scene?.add(ambientLight);
+
+  const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
+  directionalLight.position.set(10, 10, 10);
+  sceneRef.current?.scene?.add(directionalLight);
 };
 
 export const animate = (sceneRef: RefObject<threeRef>) => {

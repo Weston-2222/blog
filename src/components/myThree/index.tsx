@@ -2,6 +2,7 @@
 import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
 
 import {
+  addLight,
   animate,
   clearThree,
   handleVisibilityChange,
@@ -53,7 +54,7 @@ const MyThree = forwardRef<threeRef, MyThreeProps>(
       // 初始化場景與模型
       initThree(sceneRef, mountRef);
       loadModel(sceneRef);
-
+      addLight(sceneRef);
       // 啟動動畫迴圈
       sceneRef.current.animationLoopRunning = true;
       if (sceneRef.current.initSetting?.isAnimation) animate(sceneRef);

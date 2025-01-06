@@ -1,19 +1,46 @@
-import React from 'react';
-
+import Image from 'next/image';
 import Link from 'next/link';
 import path from 'path';
-import { articlesMetadataPromise } from '@/articles/articlesConfig';
-const Articles = async () => {
-  const articlesMetadata = await articlesMetadataPromise;
+
+import {
+  articlesMetadataPromise,
+  ArticleMetadata,
+} from '@/articles/articlesConfig';
+import { cn } from '@/lib/utils';
+
+interface ArticlesProps {
+  className?: string;
+}
+const Articles = async ({ className }: ArticlesProps) => {
+  const articlesMetadata: ArticleMetadata[] = await articlesMetadataPromise;
 
   return (
-    <div>
+    <>
       {articlesMetadata.map((article) => (
-        <Link key={article.slug} href={path.join(article.path, article.slug)}>
-          {article.title}
+        <Link
+          href={path.join(article.path, article.slug)}
+          key={article.slug}
+          className={cn(
+            'bg-foreground rounded-lg overflow-hidden cursor-pointer shadow-lg hover:bg-gray-950/[.05] dark:hover:bg-gray-50/[.15] p-4',
+            className
+          )}
+        >
+          <Image
+            src={article.image}
+            alt={article.title}
+            width={350}
+            height={350}
+            className='object-cover'
+          />
+          <p className='text-xl font-bold pt-2'>{article.title}</p>
+          <p className='text-sm text-gray-500'>{article.description}</p>
+          <p className='text-sm text-gray-500'>{article.date}</p>
+          {/* <Link key={article.slug} href={path.join(article.path, article.slug)}>
+            {article.title}
+          </Link> */}
         </Link>
       ))}
-    </div>
+    </>
   );
 };
 

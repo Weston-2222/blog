@@ -11,6 +11,7 @@ import {
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import RetroGrid from '../ui/retro-grid';
+import Link from 'next/link';
 
 // 可傳入 className 作為額外的樣式
 type ResumeBlockProps = {
@@ -57,7 +58,7 @@ const websiteLinkVariants = {
   },
   hover: {
     opacity: 1,
-    y: -15,
+    y: -10,
     x: 10,
     transition: { duration: 0.3, delay: 0.3 },
   },
@@ -95,7 +96,7 @@ const iconVariants = {
   },
   hover: {
     opacity: 1,
-    y: -50,
+    y: -20,
     transition: { duration: 0.3 },
   },
 };
@@ -129,18 +130,20 @@ const CryptoWebsite = ({ className }: ResumeBlockProps) => {
       </motion.div>
 
       {/* 網站連結按鈕 */}
-      <motion.div variants={websiteLinkVariants}>
-        <a
+      <motion.div variants={websiteLinkVariants} className='absolute'>
+        <Link
           href='https://crypto-website-nextjs-delta.vercel.app'
           target='_blank'
           rel='noopener noreferrer'
+          className='z-10'
+          prefetch={false} // 加入此屬性以避免預先載入
         >
           <button className='rounded-md p-1 flex items-center gap-1'>
             <IconCoinBitcoinFilled className='h-5 w-5' />
             加密貨幣資訊收集網站
             <IconExternalLink className='h-5 w-5' />
           </button>
-        </a>
+        </Link>
       </motion.div>
 
       {/* 加密貨幣圖示容器 */}
