@@ -1,7 +1,7 @@
-import Articles from '@/components/articles';
-import Cat from '@/components/catModel';
-import CryptoWebsite from '@/components/homePage/cryptoWebsite';
-import ResumeBlock from '@/components/homePage/resumeBlock';
+import Articles from './components/articles';
+import Cat from './components/catModel';
+import CryptoWebsite from '@/app/components/cryptoWebsite';
+import ResumeBlock from './components/resumeBlock';
 
 export const metadata = {
   title: "Weston's Blog",

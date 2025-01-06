@@ -8,7 +8,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { IconMenu2 } from '@tabler/icons-react';
 import { useState } from 'react';
-import MotionButton from './framer/motionButton';
+import MotionButton from '../../../components/framer/motionButton';
 
 export type MenuBarList = {
   name: string;

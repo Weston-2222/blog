@@ -1,4 +1,4 @@
-import NavBarMenu from '@/components/navBarMenu';
+import NavBarMenu from './navBarMenu';
 
 import ThemeToggle from '@/components/themeToggle';
 import { IconBrandGithubFilled } from '@tabler/icons-react';
