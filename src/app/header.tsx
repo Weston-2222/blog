@@ -1,9 +1,10 @@
 import NavBarMenu from '@/components/navBarMenu';
-import FloatUp from '../components/framer/floatUp';
+
 import ThemeToggle from '@/components/themeToggle';
 import { IconBrandGithubFilled } from '@tabler/icons-react';
 import Link from 'next/link';
 import { FileUser } from 'lucide-react';
+import MotionDiv from '@/components/framer/motion';
 
 const headerLink = [
   {
@@ -46,7 +47,18 @@ const Header = ({ className }: { className: string }) => {
           {/* Navigation */}
           <nav className='hidden sm:flex gap-4 items-center'>
             {headerLink.map((link) => (
-              <FloatUp key={link.name}>{link.node}</FloatUp>
+              <MotionDiv
+                key={link.name}
+                className={'rounded-lg cursor-pointer text-center'}
+                whileHover={{
+                  scale: 1.1,
+                  y: -5,
+                  boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.2)',
+                }}
+                transition={{ type: 'spring', stiffness: 300 }}
+              >
+                {link.node}
+              </MotionDiv>
             ))}
           </nav>
 

@@ -1,4 +1,4 @@
-import FloatUp from '@/components/framer/floatUp';
+import MotionDiv from '@/components/framer/motion';
 import { IconBrandGithubFilled, IconClipboardText } from '@tabler/icons-react';
 import Link from 'next/link';
 
@@ -35,7 +35,18 @@ const Footer: React.FC = () => {
       <div className='flex justify-center gap-4 mt-2'>
         <nav className='flex gap-4 items-center'>
           {headerLink.map((link) => (
-            <FloatUp key={link.name}>{link.node}</FloatUp>
+            <MotionDiv
+              key={link.name}
+              className={'rounded-lg cursor-pointer text-center'}
+              whileHover={{
+                scale: 1.1,
+                y: -5,
+                boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.2)',
+              }}
+              transition={{ type: 'spring', stiffness: 300 }}
+            >
+              {link.node}
+            </MotionDiv>
           ))}
         </nav>
       </div>
