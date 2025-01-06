@@ -60,7 +60,7 @@ const ExampleModel = () => {
   }, [animationSpeed, catModelRef]);
   // 初始化設定
   const initSetting = {
-    modelPath: '/cat.glb',
+    modelPath: '/models/cat.glb',
     meshColor: theme === 'dark' ? darkMeshColor : lightMeshColor,
     isAnimation: true,
     isWireframe: true,

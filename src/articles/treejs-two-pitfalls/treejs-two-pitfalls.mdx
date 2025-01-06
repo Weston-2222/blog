@@ -8,7 +8,7 @@ export const metadata = {
   slug: 'treejs-two-pitfalls',
   url: '/article/treejs-two-pitfalls',
   date: '2025-01-06',
-  image: '/articles/threejs-two-pitfalls/threejs-logo.webp',
+  image: 'threejs/threejs-logo',
 };
 
 <ExampleModel />
@@ -27,10 +27,9 @@ export const metadata = {
 ### 第一個坑 版本問題
 
 <ZoomableImage
-  src='/articles/threejs-two-pitfalls/fiber-issues.png'
+  src='threejs/github-issue'
   alt='React-three-fiber 版本問題'
   className='flex justify-center items-center'
-  width={500}
 />
 
 這邊簡單說就是，React 19 是重大更新，目前還在測試階段（RC），需要大幅修改庫和渲染器才能支持，包括 R3F 在內的工具還沒法提供穩定支持。
@@ -409,10 +408,9 @@ export default Example;
 ## 第二個坑 Next.js 的嚴格模式
 
 <ZoomableImage
-  src='/articles/threejs-two-pitfalls/reactStrictMode-model.png'
+  src='threejs/overlapping-cat'
   alt='Next.js 的嚴格模式下的重複載入'
   className='flex justify-center items-center'
-  width={500}
 />
 
 當初遇到的時候找半天找不到問題出在哪，問 AI 檢查了一堆地方也沒修復，後來靈機一動把嚴格模式關了，就正常了。
