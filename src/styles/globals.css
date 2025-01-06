@@ -1,10 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 * {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+}
+
+html,
+body {
+  overflow-x: hidden; /* 防止水平滾動條 */
+}
+
+body {
+  min-height: 100vh; /* 確保頁面高度填滿螢幕 */
+  max-width: 100vw; /* 防止寬度超出螢幕 */
 }
 @layer base {
   * {
@@ -16,6 +27,11 @@
   a button {
     @apply text-accent;
   }
+}
+
+main {
+  overflow-x: hidden; /* 防止水平溢出 */
+  max-width: 100%; /* 確保內容不超出屏幕 */
 }
 
 a button {
@@ -30,6 +46,21 @@ mark {
   background-color: transparent;
 }
 
+ol,
+ul,
+menu {
+  list-style: decimal;
+  margin-left: 20px;
+}
+ul {
+  list-style-type: disc; /* 使用圓點作為列表符號 */
+  margin: 0; /* 移除外邊距 */
+  padding: 0; /* 移除內邊距 */
+}
+
+ul li {
+  margin-left: 20px; /* 調整列表項的縮進 */
+}
 @layer base {
   :root {
     --background: 34, 41%, 90%;
@@ -86,13 +117,15 @@ mark {
     /* 範例：若需要邊框或陰影顏色，可再增加 */
     --border: 0, 0%, 100%, 0.102; /* 輕微白色半透明作為邊框 */
     --shadow: 0, 0%, 0%, 0.5; /* 常見深色背景陰影 */
+    --primary: 0 0% 98%;
+    --primary-foreground: 240 5.9% 10%;
+
     /* 
     --card: 240 10% 3.9%;
     --card-foreground: 0 0% 98%;
     --popover: 240 10% 3.9%;
     --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 240 5.9% 10%;
+   
     --secondary: 240 3.7% 15.9%;
     --secondary-foreground: 0 0% 98%;
     --muted: 240 3.7% 15.9%;

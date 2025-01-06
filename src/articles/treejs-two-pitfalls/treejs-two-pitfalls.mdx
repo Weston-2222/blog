@@ -1,0 +1,420 @@
+import ExampleModel from './exampleModel';
+import ZoomableImage from '@/components/zoomableImage';
+import Table from '@/components/table';
+export const metadata = {
+  title: '使用tree.js讓貓跑起來！',
+  description: '我在 Next.js 15 中使用 Three.js 放入3D模型，還有遇到的兩個坑。',
+  path: '/articles/threejs-two-pitfalls/threejs-two-pitfalls.mdx',
+  slug: 'treejs-two-pitfalls',
+  url: '/article/treejs-two-pitfalls',
+  date: '2025-01-06',
+  image: '/articles/threejs-two-pitfalls/threejs-logo.webp',
+};
+
+<ExampleModel />
+
+## 工具選擇
+
+如果想再 Next.Js 或 React 中放入 3D 模型，在網路上搜尋的話大部分的人會使用 <mark>React-three-fiber</mark> 和 <mark>React-three-drei</mark> 這兩個工具庫，
+
+> <mark>React-three-fiber</mark> 是一個 React 渲染器，將 Three.js 的功能整合到 React
+> 中，並以聲明式的方式編寫 3D 圖形，而不是傳統的 Three.js 程式式代碼。
+
+> <mark>React-three-drei</mark> 是基於 React-three-fiber 的一組擴展和工具集，它封裝了常用的
+> Three.js 功能和組件，減少了重複代碼，並提供了更高級的功能，例如鏡頭控制、加載器、3D
+> 字體等。
+
+### 第一個坑 版本問題
+
+<ZoomableImage
+  src='/articles/threejs-two-pitfalls/fiber-issues.png'
+  alt='React-three-fiber 版本問題'
+  className='flex justify-center items-center'
+  width={500}
+/>
+
+這邊簡單說就是，React 19 是重大更新，目前還在測試階段（RC），需要大幅修改庫和渲染器才能支持，包括 R3F 在內的工具還沒法提供穩定支持。
+不過，可以試用支持 React 19 的 R3F v9 alpha 版本。
+
+這邊就有兩個選擇
+
+1. 使用 R3F v9 alpha 版本：但這個不確定性很高，可能會有更多坑。
+2. 把 React 版本降到 18：但是這個專案使用的是 Next.js 15 ，如果要改的話可能需要更多配置，還是有可能會有更多坑。
+
+花了半天研究，最後決定直接使用 Three.js ，反正以前也用過，就當作是複習。
+
+## 程式碼架構
+
+目前要實現的目標，就是把 Three.js 包裝成一個元件，達到復用的效果。
+
+最終要達到的效果是下面這樣：
+
+```tsx
+const Cat = () => {
+  //設定初始參數
+  const initSetting = {
+    modelPath: '/cat.glb',
+    meshColor: theme === 'dark' ? darkMeshColor : lightMeshColor,
+  };
+  // 建立一個 ref 來存儲 MyThree 元件的引用
+  const catModelRef = useRef<threeRef>(null);
+  return <MyThree ref={catModelRef} initSetting={initSetting} />;
+};
+```
+
+只要設定參數，就可以使用 MyThree 元件，並且使用 useRef 儲存的引用來動態修改模型。
+
+主要的架構是 MyThree 元件使用 <mark>forwardRef</mark> 搭配 <mark>useImperativeHandle</mark> 函數將 MyThree 元件的引用暴露出來。
+
+這個元件只要設置初始參數，把初始化的和卸載時的清理的工作交給 MyThree 元件，並且可以使用 useRef 儲存的引用來動態修改模型。
+
+```tsx
+const MyThree = forwardRef<threeRef, MyThreeProps>(
+  ({ className, initSetting }, ref) => {
+    // 設定元件的 displayName，方便在 DevTools 中識別
+    MyThree.displayName = 'MyThree';
+    // 用於掛載 Three.js 場景的 DOM 節點
+    const mountRef = useRef<HTMLDivElement | null>(null);
+    // 用於儲存 Three.js 的核心場景物件
+    const sceneRef = useRef<threeRef>({
+      scene: null,
+      camera: null,
+      renderer: null,
+      controls: null,
+      mixer: null,
+      clock: null,
+      meshArray: [],
+      animationLoopRunning: false,
+      model: null,
+      initSetting,
+    });
+    // 使用 useImperativeHandle 暴露給父組件的功能 (Ref API)
+    useImperativeHandle<threeRef, threeRef>(ref, () => sceneRef.current);
+```
+
+執行 Three.js 需要的東西有以下五個：
+
+- 場景
+- 鏡頭
+- 模型
+- 光源
+- 渲染器
+
+### 初始化函數
+
+這邊我使用一個函數將上述五個一起初始化，並儲存引用供外部使用。
+
+```tsx foldHeight
+// 初始化three函數
+export const initThree = (
+  sceneRef: RefObject<threeRef>,
+  mountRef: RefObject<HTMLDivElement | null>
+) => {
+  if (!sceneRef.current) return; // 若 sceneRef 不存在則退出
+
+  // 初始化場景、相機與渲染器
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
+  camera.position.z = 5; // 設置相機的初始位置
+
+  const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+  renderer.setPixelRatio(window.devicePixelRatio || 1); // 設置像素比以優化畫質
+
+  // 設置軌道控制器
+  const controls = new OrbitControls(camera, renderer.domElement);
+  Object.assign(controls, {
+    enableDamping: true, // 啟用阻尼效果，使操作更平滑
+    dampingFactor: 0.05, // 設定阻尼系數
+    enableZoom: false, // 禁用縮放功能
+    maxPolarAngle: Math.PI / 2, // 限制垂直視角的最大角度
+    minPolarAngle: Math.PI / 2, // 限制垂直視角的最小角度
+    autoRotate: true, // 啟用自動旋轉
+    autoRotateSpeed: 0.5, // 設定自動旋轉速度
+  });
+
+  // 將渲染器的 DOM 元素添加到指定的掛載容器中
+  mountRef.current?.appendChild(renderer.domElement);
+
+  // 將初始化的對象存入 sceneRef 供外部使用
+  Object.assign(sceneRef.current, {
+    scene,
+    camera,
+    renderer,
+    controls,
+    clock: new THREE.Clock(), // 添加一個時鐘對象，用於動畫計時
+  });
+
+  // 設置渲染器的尺寸以適配容器大小
+  setRendererSize(sceneRef);
+};
+```
+
+這邊要注意的是要設置 <mark>renderer.setPixelRatio</mark> 函數來設置像素比，不然我在手機上看模型會很模糊。
+
+### 加載模型函數
+
+：
+接下來是加載模型的函數：
+
+```tsx foldHeight
+// 加載模型
+export const loadModel = (sceneRef: RefObject<threeRef>) => {
+  const loader = new GLTFLoader();
+  const modelPath = sceneRef.current?.initSetting?.modelPath;
+
+  if (!modelPath) return; // 若未設置模型路徑則退出
+
+  loader.load(
+    modelPath, // 模型文件路徑
+    (gltf) => {
+      // 遍歷模型的所有子節點
+      gltf.scene.traverse((child) => {
+        if (child instanceof THREE.Mesh) {
+          const material = child.material;
+          child.material = material; // 設置材質
+          child.material.emissive = child.material.color; // 添加自發光顏色
+          child.material.emissiveMap = child.material.map; // 添加自發光貼圖
+          child.material.color.set(sceneRef.current?.initSetting?.meshColor); // 設置網格顏色
+          child.material.wireframe = true; // 啟用線框模式
+          sceneRef.current?.meshArray.push(child); // 添加到網格陣列
+        }
+      });
+
+      const model = gltf.scene;
+      model.scale.set(0.08, 0.133, 0.08); // 設置模型縮放比例
+      model.position.set(0, -2, 0); // 設置模型位置
+      sceneRef.current!.model = model; // 儲存模型到 sceneRef
+      sceneRef.current!.scene?.add(model); // 添加模型到場景
+
+      // 若模型包含動畫，初始化動畫混合器並播放
+      if (gltf.animations.length > 0) {
+        const mixer = new THREE.AnimationMixer(model);
+        sceneRef.current!.mixer = mixer;
+        gltf.animations.forEach((clip) => mixer.clipAction(clip).play());
+      }
+    },
+    undefined,
+    (error) => console.error('模型加載錯誤:', error) // 處理加載失敗
+  );
+};
+```
+
+initSetting 裡有一個參數 isWireframe，這個參數是用來控制是否顯示網格，因為只有網格的模型很酷所以有了這個設定。
+
+### 添加光源
+
+```tsx
+export const addLight = (sceneRef: RefObject<threeRef>) => {
+  const ambientLight = new THREE.AmbientLight(0xffffff, 1.5);
+  sceneRef.current?.scene?.add(ambientLight);
+
+  const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
+  directionalLight.position.set(10, 10, 10);
+  sceneRef.current?.scene?.add(directionalLight);
+};
+```
+
+這邊先固定設定，之後要改成由初始設定。
+
+### 動畫函數
+
+```tsx foldHeight
+// 動畫函數
+export const animate = (sceneRef: RefObject<threeRef>) => {
+  // 若 sceneRef 不存在或動畫迴圈未啟用則退出
+  if (!sceneRef.current || !sceneRef.current.animationLoopRunning) return;
+
+  const render = () => {
+    if (!sceneRef.current?.animationLoopRunning) return; // 確保動畫迴圈仍在運行
+
+    const { scene, camera, renderer, controls, mixer, clock } =
+      sceneRef.current;
+
+    // 更新動畫與控制器
+    const delta = clock.getDelta(); // 計算自上一幀的時間差
+    mixer?.update(delta); // 更新動畫混合器
+    controls?.update(); // 更新軌道控制器
+
+    // 渲染場景
+    if (scene && camera) renderer?.render(scene, camera);
+
+    // 遞迴調用下一幀
+    requestAnimationFrame(render);
+  };
+
+  render(); // 啟動渲染
+};
+```
+
+動畫函數這邊如果 sceneRef.current.animationLoopRunning 為 false 的話，會暫停動畫，想要恢復動畫的話需要重新執行 animate 函數。
+
+### 處理可見性 節省資源
+
+這邊有一個處理可見性的函數，當頁面可見時，恢復動畫，當頁面不可見時，暫停動畫，以節省資源。
+
+```tsx
+export const handleVisibilityChange = (sceneRef: RefObject<threeRef>) => {
+  if (document.visibilityState === 'visible') {
+    sceneRef.current.animationLoopRunning = true; // 恢復動畫
+    animate(sceneRef); // 重新啟動動畫
+  } else {
+    sceneRef.current.renderer?.setAnimationLoop(null); // 暫停渲染
+  }
+};
+```
+
+這個是清理函數，在元件卸載時會執行，清理資源並重置狀態。
+
+```ts foldHeight
+export const clearThree = (
+  sceneRef: RefObject<threeRef>,
+  mountRef: RefObject<HTMLDivElement | null>
+) => {
+  if (!sceneRef.current) return;
+  const { renderer, controls, scene } = sceneRef.current;
+
+  if (renderer && renderer.domElement) {
+    mountRef.current?.removeChild(renderer.domElement); // 移除渲染器
+    renderer.dispose(); // 销毁渲染器
+  }
+
+  controls?.dispose(); // 销毁 OrbitControls
+
+  scene?.traverse((object) => {
+    if (object instanceof THREE.Mesh) {
+      object.geometry.dispose();
+      if (object.material instanceof THREE.Material) {
+        object.material.dispose();
+      }
+    }
+  });
+
+  // 清空引用
+  Object.assign(sceneRef.current, {
+    scene: null,
+    camera: null,
+    renderer: null,
+    controls: null,
+    mixer: null,
+    meshArray: [],
+    animationLoopRunning: false,
+  });
+};
+```
+
+### 頁面初始化
+
+頁面出初始化基本上就是把每個函數執行一遍，並且註冊事件監聽器。
+
+```tsx foldHeight
+useEffect(() => {
+  // 初始化場景與模型
+  initThree(sceneRef, mountRef);
+  loadModel(sceneRef);
+
+  // 啟動動畫迴圈
+  sceneRef.current.animationLoopRunning = true;
+  animate(sceneRef);
+
+  // 頁面可見性與視窗大小變化處理
+  const handleVisibility = () => handleVisibilityChange(sceneRef);
+  const handleResize = () => {
+    if (sceneRef.current.camera && sceneRef.current.renderer) {
+      setRendererSize(sceneRef);
+      setModelSize(sceneRef);
+    }
+  };
+
+  // 註冊事件監聽器
+  document.addEventListener('visibilitychange', handleVisibility);
+  window.addEventListener('resize', handleResize);
+
+  // 清理函數
+  return () => {
+    document.removeEventListener('visibilitychange', handleVisibility);
+    window.removeEventListener('resize', handleResize);
+    clearThree(sceneRef, mountRef); // 清理資源並重置狀態
+  };
+}, []);
+```
+
+差不多這樣就完成了，之後可能還要研究一下初始化的參數，讓元件更靈活，下面是使用範例：
+
+```tsx foldHeight
+const Example = () => {
+  // 初始化設定
+  const initSetting = {
+    modelPath: '/cat.glb',
+    meshColor: theme === 'dark' ? darkMeshColor : lightMeshColor,
+    isAnimation: true,
+    isWireframe: true,
+    modelScale: { x: 0.08, y: 0.133, z: 0.08 },
+    modelPosition: { x: 0, y: -2, z: 0 },
+  };
+  // 建立引用以操作 MyThree
+  const catModelRef = useMyThreeRef();
+
+  return <MyThree ref={catModelRef} initSetting={initSetting} />; // 渲染 MyThree 元件
+};
+export default Example;
+```
+
+只要短短的幾行程式碼，就可以使用 MyThree 元件，並且使用 useRef 儲存的引用來動態修改模型。
+
+下面是動態修改模型的範例：
+
+<ExampleModel />
+
+### 參數說明
+
+下面是這個元件的 initSetting 物件參數說明：
+
+<Table
+  className='bg-foreground w-[90vw]'
+  header={['參數', '類型', '預設值', '說明']}
+  body={[
+    ['isWireframe', 'boolean', 'false', '是否顯示網格'],
+    [
+      'modelScale',
+      ' { x: number; y: number; z: number }',
+      '{ x: 1, y: 1, z: 1 }',
+      '模型縮放比例',
+    ],
+    [
+      'modelPosition',
+      '{ x: number; y: number; z: number }',
+      '{ x: 0, y: 0, z: 0 }',
+      '模型位置',
+    ],
+    ['isAnimation', 'boolean', 'true', '是否開啟動畫'],
+    [
+      'setRendererSize',
+      '(width: number, renderer: THREE.WebGLRenderer) => void',
+      '(() => {})',
+      '一開始會先執行一次用來設定尺寸。元件會綁定”resize“事件，當視窗變化時點用這個函數。',
+    ],
+    [
+      'cameraPosition',
+      '{ x: number; y: number; z: number }',
+      '{ x: 1, y: 1, z: 1 }',
+      '相機初始位置',
+    ],
+    ['isAutoRotate', 'boolean', 'false', '是否啟用自旋轉'],
+    ['autoRotateSpeed', 'number', '0', '自動旋轉速度'],
+  ]}
+/>
+
+之後可能還會在更新增加更多參數。
+
+## 第二個坑 Next.js 的嚴格模式
+
+<ZoomableImage
+  src='/articles/threejs-two-pitfalls/reactStrictMode-model.png'
+  alt='Next.js 的嚴格模式下的重複載入'
+  className='flex justify-center items-center'
+  width={500}
+/>
+
+當初遇到的時候找半天找不到問題出在哪，問 AI 檢查了一堆地方也沒修復，後來靈機一動把嚴格模式關了，就正常了。
+
+在 Next.js 和 React 的嚴格模式下，開發環境會執行雙重初始化/移除的動作，這會導致模型的重複載入，這個問題先放著吧，之後再研究看看。

@@ -1,8 +1,9 @@
 import NavBarMenu from '@/components/navBarMenu';
 import FloatUp from '../components/framer/floatUp';
 import ThemeToggle from '@/components/themeToggle';
-import { IconBrandGithubFilled, IconClipboardText } from '@tabler/icons-react';
+import { IconBrandGithubFilled } from '@tabler/icons-react';
 import Link from 'next/link';
+import { FileUser } from 'lucide-react';
 
 const headerLink = [
   {
@@ -10,7 +11,7 @@ const headerLink = [
     href: '/resume',
     node: (
       <Link key='resume' href='/resume' className='p-1 flex items-center gap-1'>
-        <IconClipboardText className='h-5 w-5' />
+        <FileUser className='h-5 w-5' />
         Resume
       </Link>
     ),
