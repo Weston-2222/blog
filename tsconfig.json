@@ -29,7 +29,8 @@
     ".next/types/**/*.ts",
     "tailwind.config.ts",
     "next.config.mjs",
-    "src/articles/test.mdx"
+    "src/articles/treejs-two-pitfalls/treejs-two-pitfalls.mdx",
+    "src/styles/codaBlock.js"
   ],
   "exclude": ["node_modules"]
 }
