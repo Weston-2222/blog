@@ -35,9 +35,9 @@ const Page = async ({ params }: { params: Promise<{ slug: string }> }) => {
   if (!metadata) return notFound();
 
   return (
-    <section className='max-w-2xl p-6'>
+    <section className='max-w-2xl p-6 space-y-2'>
       <h1 className='text-4xl font-bold'>{metadata?.title}</h1>
-      <p className='text-sm text-gray-500'>{metadata?.description}</p>
+      <p className='text-lg text-gray-500'>{metadata?.description}</p>
       <Post />
     </section>
   );
