@@ -4,7 +4,7 @@ import ThemeToggle from '@/components/themeToggle';
 import { IconBrandGithubFilled } from '@tabler/icons-react';
 import Link from 'next/link';
 import { FileUser } from 'lucide-react';
-import MotionDiv from '@/components/framer/motion';
+import MotionDiv from '@/components/framer/motionDiv';
 
 const headerLink = [
   {

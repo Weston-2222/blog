@@ -1,4 +1,4 @@
-import MotionDiv from '@/components/framer/motion';
+import MotionDiv from '@/components/framer/motionDiv';
 import { IconBrandGithubFilled, IconClipboardText } from '@tabler/icons-react';
 import Link from 'next/link';
 

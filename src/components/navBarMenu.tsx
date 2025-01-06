@@ -8,7 +8,8 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { IconMenu2 } from '@tabler/icons-react';
 import { useState } from 'react';
-import BouncyButton from './framer/bouncyButton';
+import MotionButton from './framer/motionButton';
+
 export type MenuBarList = {
   name: string;
   href: string;
@@ -43,7 +44,19 @@ const NavBarMenu = ({
         >
           {menuBarList.map((item: MenuBarList) => (
             <DropdownMenuItem key={item.name}>
-              <BouncyButton>{item.node} </BouncyButton>
+              <MotionButton
+                whileTap={{
+                  scale: 1.2, // 放大
+                  y: -10, // 向上跳
+                }}
+                transition={{
+                  type: 'spring', // 弹性效果
+                  stiffness: 300,
+                  damping: 10,
+                }}
+              >
+                {item.node}
+              </MotionButton>
             </DropdownMenuItem>
           ))}
         </DropdownMenuContent>

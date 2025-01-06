@@ -7,7 +7,7 @@ import { threeRef, useMyThreeRef } from '@/components/myThree/threeSetting';
 import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
 import { Slider } from '@/components/ui/slider';
-import MotionDiv from '@/components/framer/motion';
+import MotionDiv from '@/components/framer/motionDiv';
 // 動態載入 MyThree 元件，關閉 SSR，並添加載入中效果
 const MyThree = dynamic(
   () => import(/* webpackChunkName:"CatModel" */ '@/components/myThree'),
