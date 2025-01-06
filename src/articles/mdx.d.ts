@@ -6,5 +6,6 @@ declare module '*.mdx' {
     slug: string;
     date: string;
     image: string;
+    url: string;
   };
 }

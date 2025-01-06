@@ -1,24 +1,23 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import path from 'path';
 
-import {
-  articlesMetadataPromise,
-  ArticleMetadata,
-} from '@/articles/articlesConfig';
+import { ArticleMetadata, postsPromise } from '@/articles/articlesConfig';
+
 import { cn } from '@/lib/utils';
 
 interface ArticlesProps {
   className?: string;
 }
 const Articles = async ({ className }: ArticlesProps) => {
-  const articlesMetadata: ArticleMetadata[] = await articlesMetadataPromise;
+  const articlesMetadata: ArticleMetadata[] = (await postsPromise).map(
+    (post) => post.metadata
+  );
 
   return (
     <>
       {articlesMetadata.map((article) => (
         <Link
-          href={path.join(article.path, article.slug)}
+          href={article.url}
           key={article.slug}
           className={cn(
             'bg-foreground rounded-lg overflow-hidden cursor-pointer shadow-lg hover:bg-gray-950/[.05] dark:hover:bg-gray-50/[.15] p-4',

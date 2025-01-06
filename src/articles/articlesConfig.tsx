@@ -6,16 +6,25 @@ export type ArticleMetadata = Metadata & {
   path: string;
   slug: string;
   date: string;
+  url: string;
   image: string;
 };
 
 export const articlePath = 'src/articles';
 
-export const articlesMetadataPromise: Promise<ArticleMetadata[]> = Promise.all([
+export const postsPromise = Promise.all([
   import('@/articles/treejs-two-pitfalls/treejs-two-pitfalls.mdx'),
-]).then((modules) =>
-  modules.map((module) => module.metadata as ArticleMetadata)
-);
+]);
+
+export const getArticleMetadata = async (
+  slug: string
+): Promise<ArticleMetadata> => {
+  const post = (await postsPromise).find(
+    (article) => article.metadata.slug === slug
+  );
+  if (!post) return Promise.reject({});
+  return post.metadata;
+};
 //metadata 的範例
 // export const metadata = {
 //   title: 'Post with code',
