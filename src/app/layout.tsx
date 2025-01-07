@@ -1,6 +1,6 @@
 import { ThemeProvider } from '@/components/theme-provider';
 import { Noto_Sans_TC } from 'next/font/google';
-import 'tailwindcss/tailwind.css';
+//import 'tailwindcss/tailwind.css';
 import '@/styles/globals.css';
 import Header from './components/layout/header';
 import Footer from './components/layout/footer';

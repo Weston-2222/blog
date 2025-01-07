@@ -44,7 +44,10 @@ const ResumeBlock = ({ className }: ResumeBlockProps) => {
   const [isHovered, setIsHovered] = useState(false);
   return (
     <>
-      <div
+      <motion.div
+        initial={{ opacity: 0, scale: 0.5 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.8 }}
         className={cn(
           'relative w-[300px] h-[156px] bg-foreground rounded-lg overflow-hidden cursor-pointer shadow-lg p-4 hover:bg-gray-950/[.05] dark:hover:bg-gray-50/[.15]',
           className
@@ -101,7 +104,7 @@ const ResumeBlock = ({ className }: ResumeBlockProps) => {
             </button>
           </Link>
         </motion.div>
-      </div>
+      </motion.div>
     </>
   );
 };
