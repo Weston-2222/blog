@@ -19,7 +19,7 @@ const Articles = async ({ className }: ArticlesProps) => {
           href={article.url}
           key={article.slug}
           className={cn(
-            'bg-foreground rounded-lg overflow-hidden cursor-pointer shadow-lg hover:bg-gray-950/[.05] dark:hover:bg-gray-50/[.15] p-4',
+            'flex flex-col items-center justify-center w-[300px] bg-foreground rounded-lg overflow-hidden cursor-pointer shadow-lg hover:bg-gray-950/[.05] dark:hover:bg-gray-50/[.15] p-4',
             className
           )}
         >
