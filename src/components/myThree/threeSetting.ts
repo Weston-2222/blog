@@ -1,18 +1,32 @@
 import { RefObject, useRef } from 'react';
-import * as THREE from 'three';
+import {
+  Scene,
+  PerspectiveCamera,
+  WebGLRenderer,
+  Mesh,
+  Group,
+  Object3DEventMap,
+  AnimationMixer,
+  Clock,
+  DoubleSide,
+  MeshStandardMaterial,
+  AmbientLight,
+  DirectionalLight,
+  Material,
+} from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 export type threeRef = {
-  scene: THREE.Scene | null;
-  camera: THREE.PerspectiveCamera | null;
-  renderer: THREE.WebGLRenderer | null;
+  scene: Scene | null;
+  camera: PerspectiveCamera | null;
+  renderer: WebGLRenderer | null;
   controls: OrbitControls | null;
-  mixer: THREE.AnimationMixer | null;
-  clock: THREE.Clock | null;
-  meshArray: THREE.Mesh[];
+  mixer: AnimationMixer | null;
+  clock: Clock | null;
+  meshArray: Mesh[];
   animationLoopRunning: boolean;
-  model: THREE.Group<THREE.Object3DEventMap> | null;
+  model: Group<Object3DEventMap> | null;
   gltf: GLTF | null;
   initSetting?: initSetting;
 };
@@ -23,7 +37,7 @@ export type initSetting = {
   modelScale?: { x: number; y: number; z: number };
   modelPosition?: { x: number; y: number; z: number };
   isAnimation?: boolean;
-  setRendererSize?: (width: number, renderer: THREE.WebGLRenderer) => void;
+  setRendererSize?: (width: number, renderer: WebGLRenderer) => void;
   cameraPosition?: { x: number; y: number; z: number };
   isAutoRotate?: boolean;
   autoRotateSpeed?: number;
@@ -40,12 +54,12 @@ export const initThree = (
   if (!sceneRef.current) return; // 若 sceneRef 不存在則退出
 
   // 初始化場景、相機與渲染器
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
+  const scene = new Scene();
+  const camera = new PerspectiveCamera(75, 1, 0.1, 1000);
   camera.position.z = sceneRef.current?.initSetting?.cameraPosition?.z || 0; // 設置相機的初始位置
   camera.position.y = sceneRef.current?.initSetting?.cameraPosition?.y || 0; // 設置相機的初始位置
   camera.position.x = sceneRef.current?.initSetting?.cameraPosition?.x || 0; // 設置相機的初始位置
-  const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+  const renderer = new WebGLRenderer({ alpha: true, antialias: true });
   renderer.setPixelRatio(window.devicePixelRatio || 1); // 設置像素比以優化畫質
 
   // 設置軌道控制器
@@ -69,7 +83,7 @@ export const initThree = (
     camera,
     renderer,
     controls,
-    clock: new THREE.Clock(), // 添加一個時鐘對象，用於動畫計時
+    clock: new Clock(), // 添加一個時鐘對象，用於動畫計時
   });
 
   // 設置渲染器的尺寸以適配容器大小
@@ -96,10 +110,10 @@ export const loadModel = (sceneRef: RefObject<threeRef>) => {
 
         sceneRef.current.gltf = gltf;
         gltf.scene.traverse((child) => {
-          if (child instanceof THREE.Mesh) {
-            const material = child.material as THREE.MeshStandardMaterial;
+          if (child instanceof Mesh) {
+            const material = child.material as MeshStandardMaterial;
             child.material = material; // 設置材質
-            child.material.side = THREE.DoubleSide; // 啟用雙面渲染
+            child.material.side = DoubleSide; // 啟用雙面渲染
             //child.material.emissive = child.material.color; // 添加自發光顏色
             // child.material.emissiveMap = child.material.map; // 添加自發光貼圖
             child.material.color.set(
@@ -108,8 +122,6 @@ export const loadModel = (sceneRef: RefObject<threeRef>) => {
             child.material.wireframe =
               sceneRef.current?.initSetting?.isWireframe || false; // 啟用線框模式
             sceneRef.current?.meshArray.push(child); // 添加到網格陣列
-
-            child.material.side = THREE.DoubleSide; // 啟用雙面渲染
           }
         });
 
@@ -132,7 +144,7 @@ export const loadModel = (sceneRef: RefObject<threeRef>) => {
           sceneRef.current?.initSetting?.isAnimation &&
           gltf.animations.length > 0
         ) {
-          const mixer = new THREE.AnimationMixer(model);
+          const mixer = new AnimationMixer(model);
           sceneRef.current!.mixer = mixer;
           gltf.animations.forEach((clip) => mixer.clipAction(clip).play());
         }
@@ -156,10 +168,10 @@ export const loadModel = (sceneRef: RefObject<threeRef>) => {
 
 // 添加光源
 export const addLight = (sceneRef: RefObject<threeRef>) => {
-  const ambientLight = new THREE.AmbientLight(0xffffff, 1.5);
+  const ambientLight = new AmbientLight(0xffffff, 1.5);
   sceneRef.current?.scene?.add(ambientLight);
 
-  const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
+  const directionalLight = new DirectionalLight(0xffffff, 2);
   directionalLight.position.set(10, 10, 10);
   sceneRef.current?.scene?.add(directionalLight);
 };
@@ -215,9 +227,9 @@ export const clearThree = (
   controls?.dispose(); // 销毁 OrbitControls
 
   scene?.traverse((object) => {
-    if (object instanceof THREE.Mesh) {
+    if (object instanceof Mesh) {
       object.geometry.dispose();
-      if (object.material instanceof THREE.Material) {
+      if (object.material instanceof Material) {
         object.material.dispose();
       }
     }
