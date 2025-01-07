@@ -8,7 +8,7 @@ export default {
     './src/app/**/*.{js,ts,jsx,tsx,mdx,css}',
     './src/app/globals.css',
   ],
-  darkMode: ['class'],
+  darkMode: ['selector'],
   theme: {
     extend: {
       colors: {
