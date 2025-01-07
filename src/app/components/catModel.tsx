@@ -1,19 +1,12 @@
 'use client';
 import 'client-only';
 import * as THREE from 'three';
-import dynamic from 'next/dynamic';
-import SpinnerLoading from './spinnerLoading';
-import { threeRef, useMyThreeRef } from './myThree/threeSetting';
+import MyThree from '@/components/myThree';
+import { threeRef, useMyThreeRef } from '@/components/myThree/threeSetting';
 import { useTheme } from 'next-themes';
 import { useEffect } from 'react';
+import { motion } from 'framer-motion';
 // 動態載入 MyThree 元件，關閉 SSR，並添加載入中效果
-const MyThree = dynamic(
-  () => import(/* webpackChunkName:"CatModel" */ '@/components/myThree'),
-  {
-    ssr: false,
-    loading: () => <SpinnerLoading className='h-[360px] w-full' />,
-  }
-);
 
 // 定義暗色與亮色主題的網格顏色
 const darkMeshColor = 0xff60c2;
@@ -43,7 +36,7 @@ const Cat = () => {
 
   // 初始化設定
   const initSetting = {
-    modelPath: '/cat.glb',
+    modelPath: 'models/cat.glb',
     meshColor: theme === 'dark' ? darkMeshColor : lightMeshColor,
     isAnimation: true,
     isWireframe: true,
@@ -64,7 +57,16 @@ const Cat = () => {
     }
   }, [theme, catModelRef]);
 
-  return <MyThree ref={catModelRef} initSetting={initSetting} />; // 渲染 MyThree 元件
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.5 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.8 }}
+      className='flex justify-center items-center'
+    >
+      <MyThree ref={catModelRef} initSetting={initSetting} />
+    </motion.div>
+  );
 };
 
 export default Cat;

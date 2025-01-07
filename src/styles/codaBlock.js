@@ -1,6 +1,6 @@
 const codaBlock = {
   'code[class*="language-"]': {
-    color: '#c5c8c6',
+    color: '#f8f8f2',
     textShadow: '0 1px rgba(0, 0, 0, 0.3)',
     fontFamily: 'Menlo, Monaco, "Courier New", monospace',
     direction: 'ltr',
@@ -18,7 +18,7 @@ const codaBlock = {
     hyphens: 'none',
   },
   'pre[class*="language-"]': {
-    color: '#c5c8c6',
+    color: '#f8f8f2',
     textShadow: '0 1px rgba(0, 0, 0, 0.3)',
     fontFamily: 'Menlo, Monaco, "Courier New", monospace',
     direction: 'ltr',
@@ -38,7 +38,7 @@ const codaBlock = {
     margin: '.5em 0',
     overflow: 'auto',
     borderRadius: '0.3em',
-    background: '#1d1f21',
+    background: '#282a36',
   },
   ':not(pre) > code[class*="language-"]': {
     background: '#1d1f21',
@@ -52,7 +52,7 @@ const codaBlock = {
     color: '#7C7C7C',
   },
   doctype: {
-    color: '#7C7C7C',
+    color: '#8be9fd',
   },
   cdata: {
     color: '#7C7C7C',
@@ -67,20 +67,19 @@ const codaBlock = {
     color: '#96CBFE',
   },
   keyword: {
-    color: '#96CBFE',
+    color: '#FF79C6',
   },
   tag: {
     color: '#96CBFE',
   },
   'class-name': {
-    color: '#FFFFB6',
-    textDecoration: 'underline',
+    color: '#8be9fd',
   },
   boolean: {
     color: '#99CC99',
   },
   constant: {
-    color: '#99CC99',
+    color: '#FF79C6',
   },
   symbol: {
     color: '#f92672',
@@ -98,7 +97,7 @@ const codaBlock = {
     color: '#A8FF60',
   },
   string: {
-    color: '#A8FF60',
+    color: '#f1fa8c',
   },
   char: {
     color: '#A8FF60',
@@ -135,7 +134,7 @@ const codaBlock = {
     color: '#F9EE98',
   },
   function: {
-    color: '#DAD085',
+    color: '#50fa7b',
   },
   regex: {
     color: '#E9C062',

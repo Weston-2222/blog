@@ -1,9 +1,9 @@
 import { ThemeProvider } from '@/components/theme-provider';
 import { Noto_Sans_TC } from 'next/font/google';
-import 'tailwindcss/tailwind.css';
+//import 'tailwindcss/tailwind.css';
 import '@/styles/globals.css';
-import Header from './header';
-import Footer from './footer';
+import Header from './components/layout/header';
+import Footer from './components/layout/footer';
 import PageTransitionEffect from '@/components/framer/pageTransitionEffect';
 const notoSans = Noto_Sans_TC({
   subsets: ['latin'], // 選擇需要的字集，可選 'latin', 'latin-ext', 'cyrillic', 等

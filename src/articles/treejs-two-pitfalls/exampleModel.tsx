@@ -7,7 +7,7 @@ import { threeRef, useMyThreeRef } from '@/components/myThree/threeSetting';
 import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
 import { Slider } from '@/components/ui/slider';
-import FloatUp from '@/components/framer/floatUp';
+import MotionDiv from '@/components/framer/motionDiv';
 // 動態載入 MyThree 元件，關閉 SSR，並添加載入中效果
 const MyThree = dynamic(
   () => import(/* webpackChunkName:"CatModel" */ '@/components/myThree'),
@@ -60,7 +60,7 @@ const ExampleModel = () => {
   }, [animationSpeed, catModelRef]);
   // 初始化設定
   const initSetting = {
-    modelPath: '/cat.glb',
+    modelPath: '/models/cat.glb',
     meshColor: theme === 'dark' ? darkMeshColor : lightMeshColor,
     isAnimation: true,
     isWireframe: true,
@@ -94,7 +94,16 @@ const ExampleModel = () => {
 
       <div className='flex gap-4 flex-wrap'>
         {colorList.map((color) => (
-          <FloatUp key={color} className='p-0 rounded-full'>
+          <MotionDiv
+            key={color}
+            className={'p-0 rounded-full'}
+            whileHover={{
+              scale: 1.1,
+              y: -5,
+              boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.2)',
+            }}
+            transition={{ type: 'spring', stiffness: 300 }}
+          >
             <button
               key={color}
               onClick={() => {
@@ -105,7 +114,7 @@ const ExampleModel = () => {
               }}
               className='p-4 rounded-full'
             ></button>
-          </FloatUp>
+          </MotionDiv>
         ))}
       </div>
 
