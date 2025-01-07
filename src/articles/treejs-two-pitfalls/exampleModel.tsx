@@ -13,7 +13,9 @@ const MyThree = dynamic(
   () => import(/* webpackChunkName:"CatModel" */ '@/components/myThree'),
   {
     ssr: false,
-    loading: () => <SpinnerLoading className='h-[360px] w-full' />,
+    loading: () => (
+      <SpinnerLoading className='md:w-[750px] md:h-[360px] w-full h-[48vw]' />
+    ),
   }
 );
 
