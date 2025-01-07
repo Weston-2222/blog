@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils';
 
-const Loading = ({ className }: { className?: string }) => {
+const SpinnerLoading = ({ className }: { className?: string }) => {
   return (
     <div
       aria-label='Loading...'
@@ -89,4 +89,4 @@ const Loading = ({ className }: { className?: string }) => {
   );
 };
 
-export default Loading;
+export default SpinnerLoading;
