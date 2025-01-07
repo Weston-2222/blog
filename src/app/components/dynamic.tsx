@@ -20,6 +20,6 @@ export const CryptoWebsite = dynamic(
 export const CatModel = dynamic(() => import(/*CatModel*/ './catModel'), {
   ssr: false,
   loading: () => {
-    return <Loading className='md:w-[750px] md:h-[360px] w-full h-[10vh]' />;
+    return <Loading className='md:w-[750px] md:h-[360px] w-full h-[48vw]' />;
   },
 });
