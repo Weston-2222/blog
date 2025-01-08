@@ -11,7 +11,16 @@ import { motion } from 'framer-motion';
 import RetroGrid from '@/components/ui/retro-grid';
 import Link from 'next/link';
 import { CldImage } from 'next-cloudinary';
-
+// import MouseFollow3DHead from '@/components/mouseFollow3DHead';
+import dynamic from 'next/dynamic';
+import SpinnerLoading from '@/components/spinnerLoading';
+const MouseFollow3DHead = dynamic(
+  () => import(/*MouseFollow3DHead*/ '@/components/mouseFollow3DHead'),
+  {
+    ssr: false,
+    loading: () => <SpinnerLoading className='w-[300px] h-[300px]' />,
+  }
+);
 // 可傳入 className 作為額外的樣式
 type ResumeBlockProps = {
   className?: string;
@@ -26,10 +35,10 @@ const iconWorldVariants = {
     transition: { duration: 0.3, delay: 0.7 },
   },
   hover: {
-    opacity: 1,
-    y: 70,
+    opacity: 0,
+    y: 40,
     x: 260,
-    transition: { duration: 0.3 },
+    transition: { duration: 0.7, delay: 0.2 },
   },
 };
 
@@ -38,13 +47,13 @@ const myProjectVariants = {
     opacity: 1,
     y: 50,
     x: 20,
-    transition: { duration: 0.3, delay: 0.7 },
+    transition: { duration: 0.5, delay: 0.7 },
   },
   hover: {
-    opacity: 1,
-    y: 70,
+    opacity: 0,
+    y: 50,
     x: 230,
-    transition: { duration: 0.3 },
+    transition: { duration: 0.3, delay: 0.2 },
   },
 };
 
@@ -52,13 +61,13 @@ const websiteLinkVariants = {
   rest: {
     opacity: 0,
     y: 50,
-    x: 10,
+    x: 0,
     transition: { duration: 0.3, delay: 0.5 },
   },
   hover: {
     opacity: 1,
-    y: -10,
-    x: 10,
+    y: -30,
+    x: 5,
     transition: { duration: 0.3, delay: 0.3 },
   },
 };
@@ -76,7 +85,7 @@ const coinIconsContainerVariants = {
   },
   hover: {
     opacity: 1,
-    y: -60,
+    y: -70,
     x: 20,
     transition: {
       when: 'beforeChildren',
@@ -96,6 +105,20 @@ const iconVariants = {
   hover: {
     opacity: 1,
     y: -20,
+    transition: { duration: 0.3 },
+  },
+};
+const headModelVariants = {
+  rest: {
+    opacity: 1,
+    y: -230,
+    x: 60,
+    transition: { duration: 0.3, delay: 1 },
+  },
+  hover: {
+    opacity: 1,
+    y: -170,
+    x: 130,
     transition: { duration: 0.3 },
   },
 };
@@ -182,6 +205,13 @@ const CryptoWebsite = ({ className }: ResumeBlockProps) => {
               alt='cardano-icon'
             />
           </motion.div>
+        </motion.div>
+
+        <motion.div variants={headModelVariants}>
+          <MouseFollow3DHead
+            canvasSize={{ width: 300, height: 300 }}
+            modelPath='/models/minecraft_fox_head.glb'
+          />
         </motion.div>
       </motion.div>
     </motion.div>
