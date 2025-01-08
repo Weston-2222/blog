@@ -29,6 +29,7 @@ export type threeRef = {
   model: Group<Object3DEventMap> | null;
   gltf: GLTF | null;
   initSetting?: initSetting;
+  canvas: HTMLCanvasElement | null;
 };
 export type initSetting = {
   modelPath: string;
@@ -37,10 +38,14 @@ export type initSetting = {
   modelScale?: { x: number; y: number; z: number };
   modelPosition?: { x: number; y: number; z: number };
   isAnimation?: boolean;
-  setRendererSize?: (width: number, renderer: WebGLRenderer) => void;
+  canvasSize: { width: number; height: number };
   cameraPosition?: { x: number; y: number; z: number };
   isAutoRotate?: boolean;
   autoRotateSpeed?: number;
+  maxPolarAngle?: number;
+  minPolarAngle?: number;
+  maxAzimuthAngle?: number;
+  minAzimuthAngle?: number;
 };
 export const useMyThreeRef = () => {
   return useRef<threeRef>(null);
@@ -55,21 +60,33 @@ export const initThree = (
 
   // 初始化場景、相機與渲染器
   const scene = new Scene();
-  const camera = new PerspectiveCamera(75, 1, 0.1, 1000);
+  const camera = new PerspectiveCamera(60, 1, 1, 1000);
   camera.position.z = sceneRef.current?.initSetting?.cameraPosition?.z || 0; // 設置相機的初始位置
   camera.position.y = sceneRef.current?.initSetting?.cameraPosition?.y || 0; // 設置相機的初始位置
   camera.position.x = sceneRef.current?.initSetting?.cameraPosition?.x || 0; // 設置相機的初始位置
   const renderer = new WebGLRenderer({ alpha: true, antialias: true });
   renderer.setPixelRatio(window.devicePixelRatio || 1); // 設置像素比以優化畫質
+  sceneRef.current.canvas = renderer.domElement;
 
   // 設置軌道控制器
   const controls = new OrbitControls(camera, renderer.domElement);
+
   Object.assign(controls, {
     enableDamping: true, // 啟用阻尼效果，使操作更平滑
     dampingFactor: 0.05, // 設定阻尼系數
     enableZoom: true, // 禁用縮放功能
-    maxPolarAngle: Math.PI / 2, // 限制垂直視角的最大角度
-    minPolarAngle: Math.PI / 2, // 限制垂直視角的最小角度
+    maxPolarAngle: sceneRef.current?.initSetting?.maxPolarAngle || Math.PI, // 限制垂直視角的最大角度
+    minPolarAngle: sceneRef.current?.initSetting?.minPolarAngle || 0, // 限制垂直視角的最小角度
+
+    maxAzimuthAngle:
+      sceneRef.current?.initSetting?.maxAzimuthAngle !== undefined
+        ? sceneRef.current?.initSetting?.maxAzimuthAngle
+        : Infinity, // 水平旋轉
+    minAzimuthAngle:
+      sceneRef.current?.initSetting?.minAzimuthAngle !== undefined
+        ? sceneRef.current?.initSetting?.minAzimuthAngle
+        : -Infinity, // 水平旋轉
+
     autoRotate: sceneRef.current?.initSetting?.isAutoRotate || false, // 啟用自動旋轉
     autoRotateSpeed: sceneRef.current?.initSetting?.autoRotateSpeed || 0, // 設定自動旋轉速度
   });
@@ -86,8 +103,10 @@ export const initThree = (
     clock: new Clock(), // 添加一個時鐘對象，用於動畫計時
   });
 
-  // 設置渲染器的尺寸以適配容器大小
-  setRendererSize(sceneRef);
+  renderer.setSize(
+    sceneRef.current?.initSetting?.canvasSize?.width || 0,
+    sceneRef.current?.initSetting?.canvasSize?.height || 0
+  );
 };
 
 // 加載模型
@@ -247,17 +266,11 @@ export const clearThree = (
   });
 };
 
-//模型大小對照表
-export const setRendererSize = (sceneRef: RefObject<threeRef>) => {
-  const { renderer } = sceneRef.current || {};
-  if (!renderer) return;
-  if (sceneRef.current?.initSetting?.setRendererSize) {
-    sceneRef.current?.initSetting?.setRendererSize(window.innerWidth, renderer);
-  }
-};
-
-// export const setModelSize = (sceneRef: RefObject<threeRef>) => {
-//   const { model } = sceneRef.current || {};
-//   if (!model) return;
-//   model.scale.set(0.08, 0.133, 0.08);
+// //模型大小對照表
+// export const setRendererSize = (sceneRef: RefObject<threeRef>) => {
+//   const { renderer } = sceneRef.current || {};
+//   if (!renderer) return;
+//   if (sceneRef.current?.initSetting?.setRendererSize) {
+//     sceneRef.current?.initSetting?.setRendererSize(window.innerWidth, renderer);
+//   }
 // };

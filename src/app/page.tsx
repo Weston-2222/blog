@@ -8,7 +8,7 @@ export const metadata = {
 const page = () => {
   return (
     <div className='pb-4 flex flex-col items-center justify-center'>
-      <div className='flex justify-center items-center w-full'>
+      <div className='flex justify-center items-center w-full pt-4'>
         <CatModel />
       </div>
 
