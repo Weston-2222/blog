@@ -3,7 +3,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePathname } from 'next/navigation';
 import { LayoutRouterContext } from 'next/dist/shared/lib/app-router-context.shared-runtime'; // hack
-import { useContext, useRef } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 
 // FrozenRouter 组件，保持页面切换过程中上下文的持久化
 function FrozenRouter(props: { children: React.ReactNode }) {
@@ -28,12 +28,15 @@ const variants = {
 const PageTransitionEffect = ({ children }: { children: React.ReactNode }) => {
   // 使用 usePathname 钩子获取路径名作为 key，以在路由更改时触发重新渲染
   const key = usePathname();
-
+  const [isFirstRender, setIsFirstRender] = useState(true);
+  useEffect(() => {
+    setIsFirstRender(false);
+  }, []);
   return (
     <AnimatePresence mode='wait'>
       <motion.div
         key={key}
-        initial='hidden'
+        initial={isFirstRender ? false : 'hidden'}
         animate='enter'
         exit='exit'
         variants={variants}

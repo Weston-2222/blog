@@ -21,7 +21,7 @@ export const CatModel = dynamic(() => import(/*CatModel*/ './catModel'), {
   ssr: false,
   loading: () => {
     return (
-      <SpinnerLoading className='md:w-[750px] md:h-[360px] w-full h-[48vw]' />
+      <SpinnerLoading className='md:w-[600px] w-[300px] md:h-[300px] h-[150px]' />
     );
   },
 });

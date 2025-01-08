@@ -6,7 +6,6 @@ import { threeRef, useMyThreeRef } from '@/components/myThree/threeSetting';
 import { useTheme } from 'next-themes';
 import { useEffect } from 'react';
 import { motion } from 'framer-motion';
-// 動態載入 MyThree 元件，關閉 SSR，並添加載入中效果
 
 // 定義暗色與亮色主題的網格顏色
 const darkMeshColor = 0xff60c2;
@@ -27,28 +26,44 @@ const updateModelColor = (sceneRef: threeRef, theme: string) => {
 const setRendererSize = (width: number, renderer: THREE.WebGLRenderer) => {
   renderer.setSize(
     width > 768 ? 600 : window.innerWidth * 0.8,
-    width > 768 ? 360 : window.innerWidth * 0.8 * 0.6
+    width > 768 ? 300 : window.innerWidth * 0.8 * 0.5
   );
 };
 
 const Cat = () => {
   const { theme } = useTheme(); // 獲取當前主題
+  const catModelRef = useMyThreeRef(); // 建立引用以操作 MyThree
 
+  useEffect(() => {
+    const handleResize = () => {
+      if (catModelRef.current?.renderer) {
+        setRendererSize(window.innerWidth, catModelRef.current?.renderer);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [catModelRef]);
   // 初始化設定
   const initSetting = {
-    modelPath: 'models/cat.glb',
+    modelPath: '/models/cat.glb',
     meshColor: theme === 'dark' ? darkMeshColor : lightMeshColor,
     isAnimation: true,
     isWireframe: true,
-    modelScale: { x: 0.08, y: 0.133, z: 0.08 },
+    modelScale: { x: 0.06, y: 0.12, z: 0.1 },
     modelPosition: { x: 0, y: -2, z: 0 },
-    setRendererSize,
+    canvasSize: {
+      width: window.innerWidth > 768 ? 600 : window.innerWidth * 0.8,
+      height: window.innerWidth > 768 ? 300 : window.innerWidth * 0.8 * 0.5,
+    },
     cameraPosition: { x: 0, y: 0, z: 5 },
     isAutoRotate: true,
     autoRotateSpeed: 0.1,
+    maxPolarAngle: Math.PI / 2,
+    minPolarAngle: Math.PI / 2,
   };
-
-  const catModelRef = useMyThreeRef(); // 建立引用以操作 MyThree
 
   // 當主題變更時，更新模型顏色
   useEffect(() => {

@@ -1,78 +1,85 @@
 'use client';
+
 import 'client-only';
 import * as THREE from 'three';
-import dynamic from 'next/dynamic';
-import SpinnerLoading from '@/components/spinnerLoading';
-import { threeRef, useMyThreeRef } from '@/components/myThree/threeSetting';
-import { useTheme } from 'next-themes';
+import MyThree from '@/components/myThree';
 import { useEffect, useState } from 'react';
+import { useTheme } from 'next-themes';
+import { threeRef, useMyThreeRef } from '@/components/myThree/threeSetting';
 import { Slider } from '@/components/ui/slider';
 import MotionDiv from '@/components/framer/motionDiv';
-// 動態載入 MyThree 元件，關閉 SSR，並添加載入中效果
-const MyThree = dynamic(
-  () => import(/* webpackChunkName:"CatModel" */ '@/components/myThree'),
-  {
-    ssr: false,
-    loading: () => (
-      <SpinnerLoading className='md:w-[750px] md:h-[360px] w-full h-[48vw]' />
-    ),
-  }
-);
 
 // 定義暗色與亮色主題的網格顏色
 const darkMeshColor = 0xff60c2;
 const lightMeshColor = 0x3b79ec;
 
-// 更新模型的顏色根據當前主題
+// 可選擇的顏色列表
+const colorList = [
+  0xff60c2, // 粉紅色
+  0x3b79ec, // 藍色
+  0xffd700, // 金色
+  0x32cd32, // 萊姆綠
+  0xff4500, // 橙紅色
+  0x8a2be2, // 藍紫色
+  0xff69b4, // 熱粉紅
+  0x4682b4, // 鋼藍色
+];
+
+/**
+ * 根據當前主題或指定顏色更新模型的顏色
+ *
+ * @param {threeRef | null} sceneRef - Three.js 場景的引用
+ * @param {string | undefined} theme - 當前主題（'dark' 或 'light'）
+ * @param {number} [color] - 可選的指定顏色
+ */
 const updateModelColor = (
   sceneRef: threeRef | null,
   theme: string | undefined,
   color?: number
 ) => {
-  if (sceneRef && sceneRef?.meshArray) {
+  if (sceneRef?.meshArray) {
+    const newColor =
+      color || (theme === 'dark' ? darkMeshColor : lightMeshColor);
+
     sceneRef.meshArray.forEach(({ material }) => {
-      (material as THREE.MeshBasicMaterial).color.set(
-        color ? color : theme === 'dark' ? darkMeshColor : lightMeshColor
-      );
+      (material as THREE.MeshBasicMaterial).color.set(newColor);
     });
   }
 };
 
-// 設定渲染器尺寸，根據螢幕寬度調整
+/**
+ * 根據視窗寬度設定 Three.js 渲染器的尺寸
+ *
+ * @param {number} width - 當前視窗寬度
+ * @param {THREE.WebGLRenderer} renderer - Three.js 渲染器實例
+ */
 const setRendererSize = (width: number, renderer: THREE.WebGLRenderer) => {
-  renderer.setSize(
-    width > 768 ? 600 : window.innerWidth * 0.8,
-    width > 768 ? 360 : window.innerWidth * 0.8 * 0.6
-  );
+  if (width > 768) {
+    renderer.setSize(600, 300);
+  } else {
+    const newWidth = window.innerWidth * 0.8;
+    const newHeight = newWidth * 0.5;
+    renderer.setSize(newWidth, newHeight);
+  }
 };
 
 const ExampleModel = () => {
-  const catModelRef = useMyThreeRef(); // 建立引用以操作 MyThree
-
+  const catModelRef = useMyThreeRef(); // 引用以操作 MyThree 元件
   const { theme } = useTheme(); // 獲取當前主題
   const [animationSpeed, setAnimationSpeed] = useState(1);
+
+  // 更新動畫速度
   useEffect(() => {
-    catModelRef.current?.gltf?.animations.forEach((clip) => {
-      const action = catModelRef.current?.mixer?.clipAction(clip);
-      if (action) {
-        action.play();
-        action.timeScale = animationSpeed; // 設置動畫速度，1.0為正常速度
-      }
-    });
+    if (catModelRef.current?.gltf?.animations) {
+      catModelRef.current.gltf.animations.forEach((clip) => {
+        const action = catModelRef.current?.mixer?.clipAction(clip);
+        if (action) {
+          action.play();
+          action.timeScale = animationSpeed; // 1.0 為正常速度
+        }
+      });
+    }
   }, [animationSpeed, catModelRef]);
-  // 初始化設定
-  const initSetting = {
-    modelPath: '/models/cat.glb',
-    meshColor: theme === 'dark' ? darkMeshColor : lightMeshColor,
-    isAnimation: true,
-    isWireframe: true,
-    modelScale: { x: 0.08, y: 0.133, z: 0.08 },
-    modelPosition: { x: 0, y: -2, z: 0 },
-    setRendererSize,
-    cameraPosition: { x: 0, y: 0, z: 5 },
-    isAutoRotate: true,
-    autoRotateSpeed: 0.5,
-  };
 
   // 當主題變更時，更新模型顏色
   useEffect(() => {
@@ -80,25 +87,51 @@ const ExampleModel = () => {
       updateModelColor(catModelRef.current, theme);
     }
   }, [theme, catModelRef]);
-  const colorList = [
-    0xff60c2, // 粉紅色
-    0x3b79ec, // 藍色
-    0xffd700, // 金色
-    0x32cd32, // 萊姆綠
-    0xff4500, // 橙紅色
-    0x8a2be2, // 藍紫色
-    0xff69b4, // 熱粉紅
-    0x4682b4, // 鋼藍色
-  ];
+
+  // 處理視窗調整大小
+  useEffect(() => {
+    const handleResize = () => {
+      if (catModelRef.current?.renderer) {
+        setRendererSize(window.innerWidth, catModelRef.current.renderer);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [catModelRef]);
+
+  // 初始化設定
+  const initSetting = {
+    modelPath: '/models/cat.glb',
+    meshColor: theme === 'dark' ? darkMeshColor : lightMeshColor,
+    isAnimation: true,
+    isWireframe: true,
+    modelScale: { x: 0.06, y: 0.12, z: 0.1 },
+    modelPosition: { x: 0, y: -2, z: 0 },
+    cameraPosition: { x: 0, y: 0, z: 5 },
+    isAutoRotate: true,
+    autoRotateSpeed: 0.1,
+    maxPolarAngle: Math.PI / 2,
+    minPolarAngle: Math.PI / 2,
+    canvasSize: {
+      width: window.innerWidth > 768 ? 600 : window.innerWidth * 0.8,
+      height: window.innerWidth > 768 ? 300 : window.innerWidth * 0.8 * 0.5,
+    },
+  };
+
   return (
-    <div className='flex flex-col gap-2 items-center'>
+    <div className='flex flex-col gap-2 items-center w-full h-auto'>
+      {/* Three.js 模型展示 */}
       <MyThree ref={catModelRef} initSetting={initSetting} />
 
-      <div className='flex gap-4 flex-wrap'>
+      {/* 顏色選擇按鈕 */}
+      <div className='flex gap-4 flex-wrap justify-center'>
         {colorList.map((color) => (
           <MotionDiv
             key={color}
-            className={'p-0 rounded-full'}
+            className='p-0 rounded-full'
             whileHover={{
               scale: 1.1,
               y: -5,
@@ -107,19 +140,20 @@ const ExampleModel = () => {
             transition={{ type: 'spring', stiffness: 300 }}
           >
             <button
-              key={color}
-              onClick={() => {
-                updateModelColor(catModelRef.current, theme, color);
-              }}
+              onClick={() =>
+                updateModelColor(catModelRef.current, theme, color)
+              }
               style={{
-                backgroundColor: `#${color.toString(16)}`,
+                backgroundColor: `#${color.toString(16).padStart(6, '0')}`,
               }}
               className='p-4 rounded-full'
-            ></button>
+              aria-label={`選擇顏色 #${color.toString(16)}`}
+            />
           </MotionDiv>
         ))}
       </div>
 
+      {/* 動畫速度滑桿 */}
       <Slider
         value={[animationSpeed]}
         onValueChange={(value) => setAnimationSpeed(value[0])}
