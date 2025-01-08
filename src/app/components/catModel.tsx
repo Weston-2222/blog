@@ -25,8 +25,8 @@ const updateModelColor = (sceneRef: threeRef, theme: string) => {
 // 設定渲染器尺寸，根據螢幕寬度調整
 const setRendererSize = (width: number, renderer: THREE.WebGLRenderer) => {
   renderer.setSize(
-    width > 768 ? 600 : window.innerWidth * 0.8,
-    width > 768 ? 300 : window.innerWidth * 0.8 * 0.5
+    width > 768 ? 600 : window.innerWidth,
+    width > 768 ? 300 : window.innerWidth * 0.5
   );
 };
 
@@ -55,8 +55,8 @@ const Cat = () => {
     modelScale: { x: 0.06, y: 0.12, z: 0.1 },
     modelPosition: { x: 0, y: -2, z: 0 },
     canvasSize: {
-      width: window.innerWidth > 768 ? 600 : window.innerWidth * 0.8,
-      height: window.innerWidth > 768 ? 300 : window.innerWidth * 0.8 * 0.5,
+      width: window.innerWidth > 768 ? 600 : window.innerWidth,
+      height: window.innerWidth > 768 ? 300 : window.innerWidth * 0.5,
     },
     cameraPosition: { x: 0, y: 0, z: 5 },
     isAutoRotate: true,

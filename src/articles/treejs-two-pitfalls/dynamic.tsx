@@ -5,6 +5,8 @@ export const ExampleModel = dynamic(
   () => import(/*ExampleModel*/ './exampleModel'),
   {
     ssr: false,
-    loading: () => <SpinnerLoading className=' w-full h-[50vw]' />,
+    loading: () => (
+      <SpinnerLoading className='md:w-[600px] md:h-[300px] h-[210px]' />
+    ),
   }
 );
