@@ -16,7 +16,6 @@ const lightMeshColor = 0x3b79ec;
 // 可選擇的顏色列表
 const colorList = [
   0xff60c2, // 粉紅色
-  0x3b79ec, // 藍色
   0xffd700, // 金色
   0x32cd32, // 萊姆綠
   0xff4500, // 橙紅色
@@ -122,7 +121,7 @@ const ExampleModel = () => {
   };
 
   return (
-    <div className='flex flex-col gap-2 items-center w-full h-auto'>
+    <div className='flex flex-col gap-2 items-center w-full'>
       {/* Three.js 模型展示 */}
       <MyThree ref={catModelRef} initSetting={initSetting} />
 
@@ -158,7 +157,7 @@ const ExampleModel = () => {
         value={[animationSpeed]}
         onValueChange={(value) => setAnimationSpeed(value[0])}
         max={10}
-        step={0.1}
+        step={0.05}
       />
     </div>
   );
