@@ -6,14 +6,14 @@ import {
   animate,
   clearThree,
   handleVisibilityChange,
-  initSetting,
+  InitSettingType,
   initThree,
   loadModel,
   threeRef,
 } from './threeSetting';
 type MyThreeProps = {
   className?: string;
-  initSetting: initSetting;
+  initSetting: InitSettingType;
 };
 const MyThree = forwardRef<threeRef, MyThreeProps>(
   ({ className, initSetting }, ref) => {
