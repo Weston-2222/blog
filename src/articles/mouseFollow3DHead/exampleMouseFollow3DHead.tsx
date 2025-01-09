@@ -12,6 +12,8 @@ const MouseFollow3DHead = dynamic(
 const ExampleMouseFollow3DHead = () => {
   return (
     <motion.div
+      style={{ width: '100%', height: '300px' }}
+      className='flex justify-center items-center'
       initial={{ scale: 0 }}
       animate={{ scale: 1 }}
       transition={{
@@ -24,7 +26,6 @@ const ExampleMouseFollow3DHead = () => {
       <MouseFollow3DHead
         canvasSize={{ width: 300, height: 300 }}
         modelPath='/models/minecraft_fox_head.glb'
-        className='flex justify-center items-center'
       />
     </motion.div>
   );
