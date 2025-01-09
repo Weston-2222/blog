@@ -29,7 +29,6 @@ const containerVariants = {
     transition: {
       transition: {
         staggerChildren: 0.2, // 子元素之間的延遲
-        staggerDirection: -1,
       },
     },
   },
@@ -59,7 +58,7 @@ const iconWorldVariants = {
 const websiteLinkVariants = {
   rest: {
     opacity: 0,
-    y: 50,
+    y: -250,
     x: 5,
     transition: { duration: 0.3 },
   },
@@ -77,8 +76,9 @@ const coinIconsContainerVariants = {
     y: -250,
     x: 20,
     transition: {
-      //when: 'afterChildren',
-      staggerChildren: 0.2, // 子元素之間的延遲
+      when: 'afterChildren',
+      staggerChildren: 0.1, // 子元素之間的延遲
+      staggerDirection: -1,
     },
   },
   hover: {
@@ -86,8 +86,8 @@ const coinIconsContainerVariants = {
     y: -320,
     x: 20,
     transition: {
-      // when: 'beforeChildren',
-      staggerChildren: 0.2, // 子元素之間的延遲
+      when: 'beforeChildren',
+      staggerChildren: 0.1, // 子元素之間的延遲
     },
   },
 };
@@ -97,12 +97,12 @@ const iconVariants = {
   rest: {
     opacity: 1,
     y: -190, // 向下偏移
-    transition: { duration: 0.3 },
+    transition: { duration: 0.2 },
   },
   hover: {
     opacity: 1,
     y: -20,
-    transition: { duration: 0.3 },
+    transition: { duration: 0.2 },
   },
 };
 const headModelVariants = {
