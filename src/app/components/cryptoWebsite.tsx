@@ -74,7 +74,7 @@ const websiteLinkVariants = {
 const coinIconsContainerVariants = {
   rest: {
     opacity: 1,
-    y: -300,
+    y: -250,
     x: 20,
     transition: {
       //when: 'afterChildren',
@@ -142,22 +142,22 @@ const CryptoWebsite = ({ className }: ResumeBlockProps) => {
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         className={cn(
-          'relative w-[300px] h-[156px] bg-foreground rounded-lg overflow-hidden cursor-pointer shadow-lg hover:bg-gray-950/[.05] dark:hover:bg-gray-50/[.15]',
+          'relative w-[300px] h-[156px] bg-foreground rounded-lg overflow-hidden shadow-lg hover:bg-gray-950/[.05] dark:hover:bg-gray-50/[.15]',
           className
         )}
       >
         {/* 復古網格背景效果 */}
-        <RetroGrid angle={isHovered ? 65 : 0} />
+        <RetroGrid angle={isHovered ? 65 : 0} className='z-[-1]' />
         <motion.div variants={headModelVariants}>
           <MouseFollow3DHead
             canvasSize={{ width: 250, height: 250 }}
             modelPath='/models/minecraft_fox_head.glb'
           />
         </motion.div>
-        {/* 地球圖示 */}
-        <motion.div variants={iconWorldVariants}>
-          <IconWorld className='h-[48px] w-[48px]' />
 
+        {/* 地球圖示 */}
+        <motion.div variants={iconWorldVariants} className='w-[100px]'>
+          <IconWorld className='h-[48px] w-[48px]' />
           {/* 我的專案標題 */}
           <p className='text-xl font-bold pb-10'>我的專案</p>
         </motion.div>
@@ -168,7 +168,6 @@ const CryptoWebsite = ({ className }: ResumeBlockProps) => {
             href='https://crypto-website-nextjs-delta.vercel.app'
             target='_blank'
             rel='noopener noreferrer'
-            className='z-10'
             prefetch={false} // 加入此屬性以避免預先載入
           >
             <button className='rounded-md p-1 flex items-center gap-1'>
