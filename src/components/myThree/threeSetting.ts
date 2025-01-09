@@ -28,10 +28,10 @@ export type threeRef = {
   animationLoopRunning: boolean;
   model: Group<Object3DEventMap> | null;
   gltf: GLTF | null;
-  initSetting?: initSetting;
+  initSetting?: InitSettingType;
   canvas: HTMLCanvasElement | null;
 };
-export type initSetting = {
+export type InitSettingType = {
   modelPath: string;
   meshColor?: number;
   isWireframe?: boolean;

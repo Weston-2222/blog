@@ -1,25 +1,30 @@
 'use client';
 import 'client-only';
-import * as THREE from 'three';
+import { Plane, Raycaster, Vector2, Vector3, MathUtils } from 'three';
 import MyThree from '@/components/myThree';
 import { useMyThreeRef } from '@/components/myThree/threeSetting';
-import { initSetting } from '@/components/myThree/threeSetting';
-import { useEffect } from 'react';
+import { InitSettingType } from '@/components/myThree/threeSetting';
+import { useEffect, useCallback, useMemo } from 'react';
+
+// 定義滑鼠跟隨3D頭部的屬性類型
 type MouseFollow3DHeadProps = {
   canvasSize: { width: number; height: number };
   modelPath: string;
+  className?: string;
 };
+
 const MouseFollow3DHead = ({
   canvasSize,
   modelPath,
+  className,
 }: MouseFollow3DHeadProps) => {
-  const catModelRef = useMyThreeRef(); // 建立引用以操作 MyThree
-
+  const catModelRef = useMyThreeRef();
   const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
   // 初始化設定
-  const initSetting: initSetting = {
+  const initSetting: InitSettingType = {
     modelPath,
-    modelScale: { x: 4, y: 4, z: 4 },
+    modelScale: { x: 5, y: 5, z: 5 },
     modelPosition: { x: 0, y: 0, z: 0 },
     canvasSize,
     cameraPosition: { x: 0, y: 0, z: 6 },
@@ -29,58 +34,49 @@ const MouseFollow3DHead = ({
     minAzimuthAngle: isTouch ? -Infinity : 0,
   };
 
-  useEffect(() => {
-    const plane = new THREE.Plane(new THREE.Vector3(0, 0, 1), -2);
-    const raycaster = new THREE.Raycaster();
-    const mouse = new THREE.Vector2();
-    // 儲存目標旋轉角度的 Ref
+  const raycaster = useMemo(() => new Raycaster(), []);
+  const mouse = useMemo(() => new Vector2(), []);
 
-    const pointOfIntersection = new THREE.Vector3();
+  // 使用 useMemo 確保 plane 穩定
+  const plane = useMemo(() => new Plane(new Vector3(0, 0, 1), -2), []);
 
-    const onMouseMove = (event: { clientX: number; clientY: number }) => {
+  // 滑鼠移動事件處理邏輯
+  const handleMouseMove = useCallback(
+    (event: MouseEvent) => {
       if (!catModelRef.current || !catModelRef.current.canvas) return;
-
       const rect = catModelRef.current.canvas.getBoundingClientRect();
+      const x = (event.clientX - rect.left) / rect.width;
+      const y = (event.clientY - rect.top) / rect.height;
 
-      // 計算滑鼠相對於畫布的位置
-      const x = event.clientX - rect.left;
-      const y = event.clientY - rect.top;
-
-      // 將相對位置轉換為標準化裝置座標
-      mouse.x = (x / rect.width) * 2 - 1;
-      mouse.y = -((y / rect.height) * 2 - 1);
-
-      // 限制滑鼠座標在 -1 到 1 之間
-      mouse.x = THREE.MathUtils.clamp(mouse.x, -1, 1);
-      mouse.y = THREE.MathUtils.clamp(mouse.y, -1, 1);
+      mouse.x = MathUtils.clamp(x * 2 - 1, -1, 1);
+      mouse.y = MathUtils.clamp(-(y * 2 - 1), -1, 1);
 
       if (catModelRef.current?.camera) {
         raycaster.setFromCamera(mouse, catModelRef.current.camera);
+        const pointOfIntersection = new Vector3();
         raycaster.ray.intersectPlane(plane, pointOfIntersection);
-        const modelPos = catModelRef.current.model?.position.clone();
-        if (!modelPos) return;
         catModelRef.current.model?.lookAt(pointOfIntersection);
       }
-      // 儲存目標旋轉角度
-    };
+    },
+    [catModelRef, raycaster, mouse, plane]
+  );
+
+  useEffect(() => {
+    if (!isTouch) document.addEventListener('mousemove', handleMouseMove);
 
     catModelRef.current?.renderer?.setAnimationLoop(() => {
-      if (!catModelRef.current) return;
-      const { renderer, camera, scene, model } = catModelRef.current;
-      if (!model || !renderer || !scene || !camera) return;
-
-      renderer.render(scene, camera);
+      const { renderer, camera, scene, model } = catModelRef.current || {};
+      if (renderer && camera && scene && model) renderer.render(scene, camera);
     });
 
-    // 滑鼠事件監聽
-    if (!isTouch) document.addEventListener('mousemove', onMouseMove, false);
     return () => {
-      document.removeEventListener('mousemove', onMouseMove);
+      if (!isTouch) document.removeEventListener('mousemove', handleMouseMove);
     };
-  }, [catModelRef, isTouch]);
+  }, [handleMouseMove, catModelRef, isTouch]);
+
   return (
     <MyThree
-      className='w-[300px] h-[300px]'
+      className={className}
       ref={catModelRef}
       initSetting={initSetting}
     />
