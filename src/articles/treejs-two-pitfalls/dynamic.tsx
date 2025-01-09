@@ -6,7 +6,15 @@ export const ExampleModel = dynamic(
   {
     ssr: false,
     loading: () => (
-      <SpinnerLoading className='md:w-[600px] md:h-[300px] h-[210px]' />
+      <div
+        style={{
+          width: '100%',
+          height: window.innerWidth > 768 ? '357px' : '61vw',
+        }}
+        className='flex justify-center items-center'
+      >
+        <SpinnerLoading />
+      </div>
     ),
   }
 );
