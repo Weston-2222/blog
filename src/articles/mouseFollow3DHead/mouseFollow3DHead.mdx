@@ -1,0 +1,240 @@
+import Link from 'next/link';
+import ExampleMouseFollow3DHead from './exampleMouseFollow3DHead';
+import ZoomableImage from '@/components/zoomableImage';
+export const metadata = {
+  title: '讓 3D 模型盯著滑鼠看！',
+  description: '使用 Three.js 實現追蹤滑鼠的 3D 模型',
+  path: '/articles/mouseFollow3DHead/mouseFollow3DHead.mdx',
+  slug: 'mouseFollow3DHead',
+  url: '/article/mouseFollow3DHead',
+  date: '2025-01-08',
+  image: 'mouse_follow_3d_head/blockbench_2',
+};
+
+## 在首頁放一隻狐狸
+
+<ExampleMouseFollow3DHead />
+
+畢竟我的專案是做加密貨幣相關的，想說應該放一點相關的東西，正好從 Meta mask 的 chrome 插件得到靈感，就來放學它吧。
+
+在學之前先看一下 Meta Mask 的商標條款：
+
+<ZoomableImage src='mouse_follow_3d_head/metamask_terms' alt='metamask terms' />
+
+> 除非另有書面協議，您不得轉售或再許可本產品。<mark>未經我們事先書面同意，您不得使用我們的商標。</mark>您不得歪曲或美化我們與您之間的關係（包括通過表達或暗示我們支持、贊助、認可或貢獻於您或您的商業活動）。除本協議明確允許外，您不得暗示我們與您之間存在任何關係或聯繫。
+
+既然他都這樣寫了，就不用他的狐狸了，自己來做一個吧。
+
+## 先畫一顆頭
+
+使用 Blockbench 製作一顆 Minecraft 風格的模型。
+
+<ZoomableImage src='mouse_follow_3d_head/blockbench_1' alt='blockbench fox' />
+
+把預設的身體去掉，稍微參考一下 Minecraft 裡的狐狸，在調整一下座標。
+
+<ZoomableImage
+  src='mouse_follow_3d_head/blockbench_2'
+  alt='blockbench fox head'
+/>
+
+這樣就好了，匯出成 glb 檔。
+
+## Threejs 實作
+
+使用之前包裝好的 Threejs 元件，這個元件又添加了很多參數可以設定，有時間的話可能可以整理整理發布在 npm 上。
+
+<Link href='/article/treejs-two-pitfalls'>
+  上一篇文章：
+  <button className='rounded-md p-1'>使用tree.js讓貓跑起來！</button>
+</Link>
+
+```tsx
+// 判斷是否為觸控裝置
+const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+// 初始化設定
+const initSetting: InitSettingType = {
+  modelPath, // 模型路徑
+  modelScale: { x: 4, y: 4, z: 4 }, // 模型縮放比例
+  modelPosition: { x: 0, y: 0, z: 0 }, // 模型位置
+  canvasSize, // 畫布尺寸
+  cameraPosition: { x: 0, y: 0, z: 6 }, // 相機位置
+  maxPolarAngle: isTouch ? Infinity : 0, // 相機極角上限
+  minPolarAngle: isTouch ? -Infinity : 0, // 相機極角下限
+  maxAzimuthAngle: isTouch ? Infinity : 0, // 相機方位角上限
+  minAzimuthAngle: isTouch ? -Infinity : 0, // 相機方位角下限
+};
+// 建立引用以操作 MyThree 元件
+const catModelRef = useMyThreeRef();
+
+<MyThree
+  className='w-[300px] h-[300px]' // 設定畫布寬高
+  ref={catModelRef} // 傳遞引用
+  initSetting={initSetting} // 傳遞初始化設定
+/>;
+```
+
+使用 <mark>ontouchstart</mark> 和 <mark>navigator.maxTouchPoints</mark> 來判斷是否為觸控裝置，
+如果是觸控裝置的話就讓用戶可以旋轉模型，如果是有滑鼠的用戶就讓模型不能使用滑鼠旋轉，而是讓模型自己追蹤滑鼠。
+
+## 怎麼讓模型追蹤滑鼠？
+
+感謝這篇文章：
+
+<Link
+  target='_blank'
+  rel='noopener noreferrer'
+  href='https://blog.csdn.net/qq_42760477/article/details/131358242'
+>
+  <button className='rounded-md p-1'>
+    【Threejs基础教程-点线精灵篇】 4.5 射线(Ray)与射线拾取(Raycaster)
+  </button>
+</Link>
+
+研究這篇文章還有和 GPT 討論之後，大概的實現邏輯是這樣：
+
+先建立一個 3D 平面在模型前面，然後用一條射線從相機射向滑鼠的座標，這條射線會與平面相交，
+相交的點就是模型要看的方向。
+
+下面是示意圖：
+
+<ZoomableImage src='mouse_follow_3d_head/blender_1' alt='blender' />
+
+先初始化這幾個核心物件。
+
+```tsx
+// 建立一個平面，用於射線相交檢測
+const plane = new Plane(new Vector3(0, 0, 1), -2);
+// 射線投射器
+const raycaster = new Raycaster();
+// 滑鼠位置
+const mouse = new Vector2();
+// 儲存交點位置的向量
+const pointOfIntersection = new Vector3();
+```
+
+### 注意！！有坑！
+
+下面這邊是官方寫法：
+
+```tsx
+pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
+pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
+```
+
+<Link
+  target='_blank'
+  rel='noopener noreferrer'
+  href='https://threejs.org/docs/#api/en/core/Raycaster'
+>
+  官方文檔： <button className='rounded-md p-1'>Three.js doc</button>
+</Link>
+
+這邊需要做特別處理，滑鼠的座標是相對於整個銀幕的，而我的 canvas 不佔據全螢幕，所以這邊會有誤差，
+要解決這個誤差，在計算 NDC 的時候，需要把滑鼠的座標除以畫布的寬高，然後乘以 2，再減 1，這樣就可以得到正確的 NDC 座標。
+
+```tsx
+mouse.x = (x / rect.width) * 2 - 1;
+mouse.y = -((y / rect.height) * 2 - 1);
+```
+
+接下來是綁定滑鼠移動事件，並且在事件中計算射線與平面相交的點，使用<mark>lookAt</mark>函數讓模型看向這個點。
+
+```tsx
+// 設定射線從相機射向滑鼠座標
+raycaster.setFromCamera(mouse, catModelRef.current.camera);
+// 將射線與平面相交的點存在 pointOfIntersection
+raycaster.ray.intersectPlane(plane, pointOfIntersection);
+// 模型看向 pointOfIntersection 也就是射線與平面相交的點
+catModelRef.current.model?.lookAt(pointOfIntersection);
+```
+
+完整程式碼：
+
+```tsx foldHeight
+'use client';
+import 'client-only';
+import { Plane, Raycaster, Vector2, Vector3, MathUtils } from 'three';
+import MyThree from '@/components/myThree';
+import { useMyThreeRef } from '@/components/myThree/threeSetting';
+import { InitSettingType } from '@/components/myThree/threeSetting';
+import { useEffect, useCallback, useMemo } from 'react';
+
+// 定義滑鼠跟隨3D頭部的屬性類型
+type MouseFollow3DHeadProps = {
+  canvasSize: { width: number; height: number };
+  modelPath: string;
+};
+
+const MouseFollow3DHead = ({
+  canvasSize,
+  modelPath,
+}: MouseFollow3DHeadProps) => {
+  const catModelRef = useMyThreeRef();
+  const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+  // 初始化設定
+  const initSetting: InitSettingType = {
+    modelPath,
+    modelScale: { x: 4, y: 4, z: 4 },
+    modelPosition: { x: 0, y: 0, z: 0 },
+    canvasSize,
+    cameraPosition: { x: 0, y: 0, z: 6 },
+    maxPolarAngle: isTouch ? Infinity : 0,
+    minPolarAngle: isTouch ? -Infinity : 0,
+    maxAzimuthAngle: isTouch ? Infinity : 0,
+    minAzimuthAngle: isTouch ? -Infinity : 0,
+  };
+
+  const raycaster = useMemo(() => new Raycaster(), []);
+  const mouse = useMemo(() => new Vector2(), []);
+
+  // 使用 useMemo 確保 plane 穩定
+  const plane = useMemo(() => new Plane(new Vector3(0, 0, 1), -2), []);
+
+  // 滑鼠移動事件處理邏輯
+  const handleMouseMove = useCallback(
+    (event: MouseEvent) => {
+      if (!catModelRef.current || !catModelRef.current.canvas) return;
+      const rect = catModelRef.current.canvas.getBoundingClientRect();
+      const x = (event.clientX - rect.left) / rect.width;
+      const y = (event.clientY - rect.top) / rect.height;
+
+      mouse.x = MathUtils.clamp(x * 2 - 1, -1, 1);
+      mouse.y = MathUtils.clamp(-(y * 2 - 1), -1, 1);
+
+      if (catModelRef.current?.camera) {
+        raycaster.setFromCamera(mouse, catModelRef.current.camera);
+        const pointOfIntersection = new Vector3();
+        raycaster.ray.intersectPlane(plane, pointOfIntersection);
+        catModelRef.current.model?.lookAt(pointOfIntersection);
+      }
+    },
+    [catModelRef, raycaster, mouse, plane]
+  );
+
+  useEffect(() => {
+    if (!isTouch) document.addEventListener('mousemove', handleMouseMove);
+
+    catModelRef.current?.renderer?.setAnimationLoop(() => {
+      const { renderer, camera, scene, model } = catModelRef.current || {};
+      if (renderer && camera && scene && model) renderer.render(scene, camera);
+    });
+
+    return () => {
+      if (!isTouch) document.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, [handleMouseMove, catModelRef, isTouch]);
+
+  return (
+    <MyThree
+      className='w-[300px] h-[300px]'
+      ref={catModelRef}
+      initSetting={initSetting}
+    />
+  );
+};
+
+export default MouseFollow3DHead;
+```

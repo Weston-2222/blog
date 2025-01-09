@@ -14,6 +14,7 @@ export const articlePath = 'src/articles';
 
 export const postsPromise = Promise.all([
   import('@/articles/treejs-two-pitfalls/treejs-two-pitfalls.mdx'),
+  import('@/articles/mouseFollow3DHead/mouseFollow3DHead.mdx'),
 ]);
 
 export const getArticleMetadata = async (
