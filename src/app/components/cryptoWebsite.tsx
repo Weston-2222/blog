@@ -72,39 +72,23 @@ const websiteLinkVariants = {
 
 const coinIconsContainerVariants = {
   rest: {
-    opacity: 1,
-    y: -250,
+    opacity: 0,
+    y: -380,
     x: 20,
     transition: {
-      when: 'afterChildren',
-      staggerChildren: 0.1, // 子元素之間的延遲
-      staggerDirection: -1,
+      duration: 0.3,
     },
   },
   hover: {
     opacity: 1,
-    y: -320,
+    y: -330,
     x: 20,
     transition: {
-      when: 'beforeChildren',
-      staggerChildren: 0.1, // 子元素之間的延遲
+      duration: 0.3,
     },
   },
 };
 
-// 子元素 (加密貨幣圖示) 的動畫變體
-const iconVariants = {
-  rest: {
-    opacity: 1,
-    y: -190, // 向下偏移
-    transition: { duration: 0.2 },
-  },
-  hover: {
-    opacity: 1,
-    y: -20,
-    transition: { duration: 0.2 },
-  },
-};
 const headModelVariants = {
   rest: {
     opacity: 1,
@@ -121,7 +105,12 @@ const headModelVariants = {
     opacity: 1,
     y: -10,
     x: 160,
-    transition: { duration: 0.1 },
+    transition: {
+      duration: 0.1,
+      type: 'spring',
+      stiffness: 200,
+      damping: 10,
+    },
   },
 };
 
@@ -184,32 +173,31 @@ const CryptoWebsite = ({ className }: ResumeBlockProps) => {
           className='grid grid-cols-3 w-[180px]'
         >
           {/* Bitcoin 圖示 */}
-          <motion.div variants={iconVariants}>
-            <CldImage
-              width='50'
-              height='50'
-              src='bitcoin-icon'
-              alt='bitcoin-icon'
-            />
-          </motion.div>
+
+          <CldImage
+            width='50'
+            height='50'
+            src='bitcoin-icon'
+            alt='bitcoin-icon'
+          />
+
           {/* Ethereum 圖示 */}
-          <motion.div variants={iconVariants}>
-            <CldImage
-              width='50'
-              height='50'
-              src='ethereum-icon'
-              alt='ethereum-icon'
-            />
-          </motion.div>
+
+          <CldImage
+            width='50'
+            height='50'
+            src='ethereum-icon'
+            alt='ethereum-icon'
+          />
+
           {/* Cardano 圖示 */}
-          <motion.div variants={iconVariants}>
-            <CldImage
-              width='50'
-              height='50'
-              src='cardano-icon'
-              alt='cardano-icon'
-            />
-          </motion.div>
+
+          <CldImage
+            width='50'
+            height='50'
+            src='cardano-icon'
+            alt='cardano-icon'
+          />
         </motion.div>
       </motion.div>
     </motion.div>
