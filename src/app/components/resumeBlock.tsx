@@ -45,9 +45,9 @@ const ResumeBlock = ({ className }: ResumeBlockProps) => {
   return (
     <>
       <motion.div
-        initial={{ opacity: 0, scale: 0.5 }}
+        initial={{ opacity: 0, scale: 0 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.8 }}
+        transition={{ duration: 1 }}
         className={cn(
           'relative w-[300px] h-[156px] bg-foreground rounded-lg overflow-hidden cursor-pointer shadow-lg p-4 hover:bg-gray-950/[.05] dark:hover:bg-gray-50/[.15]',
           className

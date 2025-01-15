@@ -58,9 +58,9 @@ const iconWorldVariants = {
 const websiteLinkVariants = {
   rest: {
     opacity: 0,
-    y: -250,
+    y: -150,
     x: 5,
-    transition: { duration: 0.3 },
+    transition: { duration: 0.4 },
   },
   hover: {
     opacity: 1,
@@ -120,9 +120,9 @@ const CryptoWebsite = ({ className }: ResumeBlockProps) => {
 
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.5 }}
+      initial={{ opacity: 0, scale: 0 }}
       animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.8 }}
+      transition={{ duration: 1 }}
     >
       <motion.div
         initial='rest'
