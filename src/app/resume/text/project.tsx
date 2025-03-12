@@ -35,10 +35,6 @@ const Project = () => {
           使用 <mark>MongoDB</mark> 儲存用戶資料。
         </li>
       </ul>
-      <p>
-        &nbsp;&nbsp;&nbsp;&nbsp;由於 Next.js 13 新增 App
-        Route機制，導致網路資訊常有新舊混雜的情況，且我的英文能力尚需加強，因此在查詢與學習上遇到一些挑戰，但我仍積極努力克服。
-      </p>
 
       <a
         href='https://crypto-website-nextjs-delta.vercel.app'
